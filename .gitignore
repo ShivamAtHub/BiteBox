@@ -1,0 +1,25 @@
+# Node modules
+frontend/node_modules/
+backend/node_modules/
+
+# Build output
+frontend/dist/
+backend/dist/
+
+# Environment variables
+frontend/.env
+backend/.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# System / IDE stuff
+.DS_Store
+.vscode/
+
+# OS-specific
+Thumbs.db
+
+# Optional: ignore .env.example if you're not using one
+.env.example
