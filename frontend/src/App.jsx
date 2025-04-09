@@ -5,7 +5,7 @@ import { HomePage } from "./pages/HomePage";
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-black text-gray-900">
+      <div className="min-h-screen bg-black text-white">
         <Routes>
           <Route path="/" element={<HomePage />} />
         </Routes>
