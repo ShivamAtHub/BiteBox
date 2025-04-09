@@ -16,6 +16,7 @@
     "cobe": "^0.6.3",
     "dom": "^0.0.3",
     "framer-motion": "^12.6.3",
+    "lucide-react": "^0.487.0",
     "motion": "^12.6.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
