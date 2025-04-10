@@ -7,6 +7,7 @@ import { GlowingEffect } from "../components/ui/glowing-effect";
 import { BentoGrid, BentoGridItem } from "../components/ui/bento-grid";
 import { AnimatedTestimonials } from "../components/ui/animated-testimonials";
 import { Carousel, Card } from "../components/ui/apple-cards-carousel";
+import Footer from '../components/ui/Footer';
 import {
     Route, Bike, Cpu, Rocket, Touchpad, Map, UserCheck, Code2, Sparkles, MousePointerClick, BarChart3, Headset
 } from "lucide-react";
@@ -19,10 +20,12 @@ import {
     IconSignature,
     IconTableColumn,
 } from "@tabler/icons-react";
+import Navbar from '../components/ui/Navbar';
 
 export function HomePage() {
     return (
         <div className="overflow-x-hidden relative flex w-full min-h-screen flex-col items-center justify-center bg-white dark:bg-black">
+            <Navbar variant='navbar' />
             <div className="relative w-full max-w-7xl px-4 py-10 md:py-20">
 
                 {/* <div className="absolute inset-y-0 left-0 h-full w-px bg-neutral-200/80 dark:bg-neutral-800/80">
@@ -41,7 +44,7 @@ export function HomePage() {
                 {/* Removed the wrapper div that had px-4 py-10 md:py-20 */}
 
                 {/* Animated Heading */}
-                <h1 className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-slate-700 md:text-4xl lg:text-7xl dark:text-slate-300">
+                <h1 className="relative z-10 mx-auto mt-40 max-w-4xl text-center text-2xl font-bold text-slate-700 md:text-4xl lg:text-7xl dark:text-slate-300">
                     {"BiteBox delivers hot meals, fast & fresh"
                         .split(" ")
                         .map((word, index) => (
@@ -77,7 +80,7 @@ export function HomePage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: 1 }}
-                    className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
+                    className="relative z-10 mt-8 mb-40 flex flex-wrap items-center justify-center gap-4"
                 >
                     <button className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
                         Try BiteBox Now
@@ -191,8 +194,10 @@ export function HomePage() {
                             </motion.span>
                         ))}
                 </h1>
-
-                <AnimatedTestimonialsDemo />
+                <div className='mb-40'>
+                    <AnimatedTestimonialsDemo />
+                </div>
+                <Footer />
 
             </div>
             {/* <BackgroundBeams /> */}
@@ -321,7 +326,7 @@ const items = [
                             "radial-gradient(circle at bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0) 90%)",
                     }}
                 />
-                <img src="/assets/delivery.png" alt="Feature" className="relative z-10 h-30 w-30 object-contain" />
+                <img loading="lazy" src="/assets/delivery.png" alt="Feature" className="relative z-10 h-30 w-30 object-contain" />
             </div>
         ),
         icon: <Map className="h-4 w-4" />,
@@ -348,7 +353,7 @@ const items = [
                             "radial-gradient(circle at bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0) 90%)",
                     }}
                 />
-                <img src="/assets/clock.png" alt="Driver" className="relative z-10 h-20 w-20 object-contain" />
+                <img loading="lazy" src="/assets/clock.png" alt="Driver" className="relative z-10 h-20 w-20 object-contain" />
             </div>
         ),
         icon: <UserCheck className="h-4 w-4" />,
@@ -375,7 +380,7 @@ const items = [
                             "radial-gradient(circle at bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0) 90%)",
                     }}
                 />
-                <img src="/assets/react.png" alt="Tech" className="relative z-10 h-20 w-20 object-contain" />
+                <img loading="lazy" src="/assets/react.png" alt="Tech" className="relative z-10 h-20 w-20 object-contain" />
             </div>
         ),
         icon: <Code2 className="h-4 w-4" />,
@@ -402,7 +407,7 @@ const items = [
                             "radial-gradient(circle at bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0) 90%)",
                     }}
                 />
-                <img src="/assets/upcoming.png" alt="Upcoming" className="relative z-10 h-25 w-25 object-contain" />
+                <img loading="lazy" src="/assets/upcoming.png" alt="Upcoming" className="relative z-10 h-25 w-25 object-contain" />
             </div>
         ),
         icon: <Sparkles className="h-4 w-4" />,
@@ -429,7 +434,7 @@ const items = [
                             "radial-gradient(circle at bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0) 90%)",
                     }}
                 />
-                <img src="/assets/ux.png" alt="UX" className="relative z-10 h-20 w-20 object-contain" />
+                <img loading="lazy" src="/assets/ux.png" alt="UX" className="relative z-10 h-20 w-20 object-contain" />
             </div>
         ),
         icon: <MousePointerClick className="h-4 w-4" />,
@@ -456,7 +461,7 @@ const items = [
                             "radial-gradient(circle at bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0) 90%)",
                     }}
                 />
-                <img src="/assets/order.png" alt="Insights" className="relative z-10 h-20 w-20 object-contain" />
+                <img loading="lazy" src="/assets/order.png" alt="Insights" className="relative z-10 h-20 w-20 object-contain" />
             </div>
         ),
         icon: <BarChart3 className="h-4 w-4" />,
@@ -483,7 +488,7 @@ const items = [
                             "radial-gradient(circle at bottom left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0) 90%)",
                     }}
                 />
-                <img src="/assets/support.png" alt="Support" className="relative z-10 h-20 w-20 object-contain" />
+                <img loading="lazy" src="/assets/support.png" alt="Support" className="relative z-10 h-20 w-20 object-contain" />
             </div>
         ),
         icon: <Headset className="h-4 w-4" />,
@@ -500,35 +505,35 @@ export function AnimatedTestimonialsDemo() {
                 "BiteBox made my food deliveries way smoother. I can track everything in real-time, and the interface is super easy to use!",
             name: "Aarav Mehta",
             designation: "Verified Customer",
-            src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=400&q=60",
         },
         {
             quote:
                 "Honestly didn’t expect it to work this well. The app is fast, reliable, and my orders have always been on point.",
             name: "Priya Sharma",
             designation: "Happy Customer",
-            src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=400&q=60",
         },
         {
             quote:
                 "I love how simple everything is. Placing an order takes seconds, and I always know where my delivery is.",
             name: "Rahul Desai",
             designation: "Frequent User",
-            src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=400&q=60",
         },
         {
             quote:
                 "Whenever I’ve had a question, support was right there to help. Super impressed with how responsive they are!",
             name: "Sneha R.",
             designation: "Verified Buyer",
-            src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=400&q=60",
         },
         {
             quote:
                 "Been using BiteBox for a few months now and I’m loving it. Never had a single delay, and it scales well for our office orders too.",
             name: "Ritika Patel",
             designation: "Longtime Customer",
-            src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=400&q=60",
         },
     ];
     return <AnimatedTestimonials testimonials={testimonials} />;
@@ -583,37 +588,37 @@ const data = [
     {
         category: "Smart Delivery",
         title: "Lightning-fast food delivery.",
-        src: "https://images.unsplash.com/photo-1623652621708-e641fe4810f1?q=80&w=1664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1623652621708-e641fe4810f1?q=80&w=1664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1920&q=75",
         content: <DummyContent />,
     },
     {
         category: "Real-time Tracking",
         title: "Track orders live from kitchen to doorstep.",
-        src: "https://images.unsplash.com/photo-1554672409-87b40d480f70?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1554672409-87b40d480f70?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1920&q=75",
         content: <DummyContent />,
     },
     {
         category: "Customer Experience",
         title: "Built to delight food lovers everywhere.",
-        src: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1920&q=75",
         content: <DummyContent />,
     },
     {
         category: "Route Optimization",
         title: "Smarter paths. Quicker deliveries.",
-        src: "https://images.unsplash.com/photo-1631016800587-97917209db85?q=80&w=1827&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1631016800587-97917209db85?q=80&w=1827&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1920&q=75",
         content: <DummyContent />,
     },
     {
         category: "Partner With Us",
         title: "Join as a driver or a restaurant partner.",
-        src: "https://images.unsplash.com/photo-1496115965489-21be7e6e59a0?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1496115965489-21be7e6e59a0?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1920&q=75",
         content: <DummyContent />,
     },
     {
         category: "Hiring",
         title: "We're hiring engineers and designers!",
-        src: "https://images.unsplash.com/photo-1511376979163-f804dff7ad7b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        src: "https://images.unsplash.com/photo-1511376979163-f804dff7ad7b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1920&q=75",
         content: <DummyContent />,
     },
 ];
