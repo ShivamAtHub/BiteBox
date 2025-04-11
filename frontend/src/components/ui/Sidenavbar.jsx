@@ -4,7 +4,6 @@ import {
   IconArrowLeft,
   IconHistory,
   IconSettings,
-  IconUserBolt,
   IconUser,
   IconMenu2,
   IconMapPin,
@@ -53,39 +52,33 @@ export function SidebarDemo() {
 
   const [open, setOpen] = useState(false);
   return (
-    <div
-      className={cn(
-        "flex w-full flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-100 md:flex-row dark:border-neutral-700 dark:bg-neutral-800",
-        "h-screen" // Make it full height
-      )}>
-      <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-10">
-          <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-            {open ? <Logo /> : <LogoIcon />}
-            <div className="mt-8 flex flex-col gap-2">
-              {toplinks.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
-              ))}
-            </div>
+    <Sidebar open={open} setOpen={setOpen}>
+      <SidebarBody className="justify-between gap-10">
+        <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
+          {open ? <Logo /> : <LogoIcon />}
+          <div className="mt-8 flex flex-col gap-2">
+            {toplinks.map((link, idx) => (
+              <SidebarLink key={idx} link={link} />
+            ))}
           </div>
-          <div>
-          <SidebarLink link={logoutLink} />
-          <hr className="my-2 border-neutral-300 dark:border-neutral-700" />
-            <SidebarLink
-              link={{
-                label: "Demo User 1",
-                href: "#",
-                icon: (
-                  <IconUser className="h-6 w-6 text-neutral-700 dark:text-neutral-200" />
-                ),
-              }} />
-          </div>
-        </SidebarBody>
-      </Sidebar>
-      <Dashboard />
-    </div>
+        </div>
+        <div>
+        <SidebarLink link={logoutLink} />
+        <hr className="my-2 border-neutral-300 dark:border-neutral-700" />
+          <SidebarLink
+            link={{
+              label: "Demo User 1",
+              href: "#",
+              icon: (
+                <IconUser className="h-6 w-6 text-neutral-700 dark:text-neutral-200" />
+              ),
+            }} />
+        </div>
+      </SidebarBody>
+    </Sidebar>
   );
 }
+
 export const Logo = () => {
   return (
     <Link
@@ -93,7 +86,7 @@ export const Logo = () => {
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
     >
       <img
-        src="/bitebox.png" // Assuming your logo is in the public folder
+        src="/bitebox.png"
         alt="Logo"
         className="h-6 w-6 object-contain"
       />
@@ -107,27 +100,17 @@ export const Logo = () => {
     </Link>
   );
 };
+
 export const LogoIcon = () => {
   return (
     <Link
       to="#"
       className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black">
       <img
-        src="/bitebox.png" // Assuming your logo is in the public folder
+        src="/bitebox.png"
         alt="Logo"
         className="h-6 w-6 object-contain"
       />
     </Link>
-  );
-};
-
-// Empty dashboard component for you to add your own content
-const Dashboard = () => {
-  return (
-    <div className="flex flex-1">
-      <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700 dark:bg-neutral-900">
-        {/* Your content will go here */}
-      </div>
-    </div>
   );
 };
