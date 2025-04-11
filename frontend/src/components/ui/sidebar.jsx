@@ -1,9 +1,7 @@
-// Remove "use client" as it's not needed in Vite
 import { cn } from "../../lib/utils";
-// Replace Next.js Link with React Router's Link
 import { Link } from "react-router-dom";
 import React, { useState, createContext, useContext } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 
 const SidebarContext = createContext(undefined);

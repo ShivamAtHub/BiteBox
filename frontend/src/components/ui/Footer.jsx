@@ -10,11 +10,11 @@ const teamMembers = [
   },
   {
     name: "Darshan Bhere",
-    linkedin: "https://www.linkedin.com/in/member2",
+    linkedin: "https://www.linkedin.com/in/darshan-bhere-b69a14260/",
   },
   {
     name: "Bhagyashree Dhongde",
-    linkedin: "https://www.linkedin.com/in/member3",
+    linkedin: "https://www.linkedin.com/in/bhagyashree-dhongde-915582258/",
   },
 ];
 
