@@ -1,15 +1,22 @@
 import React from "react";
 import Navbar from "../components/ui/Navbar";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"; 
 import { HeroHighlight, Highlight } from "../components/ui/hero-highlight";
 import { ContainerTextFlip } from "../components/ui/container-text-flip";
+import { FeaturesSectionDemo } from "./CustomerFeature";
 
 const Dashboard = () => {
   return (
-    <div className="flex flex-col min-h-screen w-full">
-      <div className="flex flex-row h-screen">
+    <div className="flex flex-row min-h-screen w-full">
+      {/* Side bar - Fixed position */}
+      <div className="sticky top-0 h-screen">
         <Navbar variant='sidebar' />
-        <div className="flex-1 overflow-auto">
+      </div>
+
+      {/* Main content area */}
+      <div className="flex-1 overflow-auto">
+        {/* Hero Section - Welcome */}
+        <div>
           <HeroHighlight>
             <motion.h1
               initial={{
@@ -30,6 +37,9 @@ const Dashboard = () => {
             </motion.h1>
           </HeroHighlight>
         </div>
+
+        {/* Feature Section */}
+        <FeaturesSectionDemo />
       </div>
     </div>
   );
