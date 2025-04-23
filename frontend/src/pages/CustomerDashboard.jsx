@@ -1,9 +1,10 @@
 import React from "react";
 import Navbar from "../components/ui/Navbar";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 import { HeroHighlight, Highlight } from "../components/ui/hero-highlight";
 import { ContainerTextFlip } from "../components/ui/container-text-flip";
 import { FeaturesSectionDemo } from "./CustomerFeature";
+import Footer from '../components/ui/Footer';
 
 const Dashboard = () => {
   return (
@@ -14,7 +15,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1">
         {/* Hero Section - Welcome */}
         <div>
           <HeroHighlight>
@@ -40,6 +41,11 @@ const Dashboard = () => {
 
         {/* Feature Section */}
         <FeaturesSectionDemo />
+
+        <div className="max-w-screen-xl mx-auto px-4 pt-20 pb-10">
+          <Footer />
+        </div>
+
       </div>
     </div>
   );

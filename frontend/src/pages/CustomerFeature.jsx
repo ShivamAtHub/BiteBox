@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { cn } from "../lib/utils";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import createGlobe from "cobe";
+import { Link } from "react-router-dom";
 
 export function FeaturesSectionDemo() {
     const features = [
@@ -9,6 +10,7 @@ export function FeaturesSectionDemo() {
             title: "Explore with Browser Menu",
             description: "Quickly browse through restaurants, cuisines, and exclusive offers — all in one intuitive menu.",
             skeleton: <MenuSkeleton />,
+            link: "/",
             className: "col-span-1 md:col-span-3 border dark:border-neutral-800",
         },
         {
@@ -44,9 +46,11 @@ export function FeaturesSectionDemo() {
             <div className="grid grid-cols-1 md:grid-cols-6 gap-2 mt-10 rounded-md overflow-hidden">
                 {features.map((feature) => (
                     <FeatureCard key={feature.title} className={feature.className}>
-                        <FeatureTitle>{feature.title}</FeatureTitle>
-                        <FeatureDescription>{feature.description}</FeatureDescription>
-                        <div className="h-full w-full">{feature.skeleton}</div>
+                        <Link to={feature.link} className="block h-full w-full">
+                            <FeatureTitle>{feature.title}</FeatureTitle>
+                            <FeatureDescription>{feature.description}</FeatureDescription>
+                            <div className="h-full w-full">{feature.skeleton}</div>
+                        </Link>
                     </FeatureCard>
                 ))}
             </div>
@@ -54,11 +58,46 @@ export function FeaturesSectionDemo() {
     );
 }
 
-const FeatureCard = ({ children, className }) => (
-    <div className={cn("p-4 sm:p-6 relative overflow-hidden", className)}>
-        {children}
-    </div>
-);
+const FeatureCard = ({ children, className }) => {
+    const cardRef = useRef(null);
+    const mouseX = useMotionValue(0.5);
+    const mouseY = useMotionValue(0.5);
+
+    const rotateX = useTransform(mouseY, [0, 1], [8, -8]);
+    const rotateY = useTransform(mouseX, [0, 1], [-8, 8]);
+
+    const handleMouseMove = (e) => {
+        const bounds = cardRef.current.getBoundingClientRect();
+        const x = (e.clientX - bounds.left) / bounds.width;
+        const y = (e.clientY - bounds.top) / bounds.height;
+
+        mouseX.set(x);
+        mouseY.set(y);
+    };
+
+    return (
+        <motion.div
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => {
+                mouseX.set(0.5);
+                mouseY.set(0.5);
+            }}
+            style={{
+                rotateX,
+                rotateY,
+                transformPerspective: 800,
+            }}
+            className={cn(
+                "p-4 sm:p-6 relative overflow-hidden transition-transform duration-200 ease-in-out will-change-transform",
+                className
+            )}
+        >
+            {children}
+        </motion.div>
+    );
+};
+
 
 const FeatureTitle = ({ children }) => (
     <p className="text-left text-black dark:text-white text-lg font-medium">{children}</p>
@@ -79,7 +118,6 @@ const FadedCornerImage = ({ src, alt }) => (
             transition={{ duration: 1.2 }}
             className="absolute bottom--20 right-0 h-64 w-64 object-cover rotate-[-40deg] rounded-md"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-white dark:from-black to-transparent pointer-events-none" />
     </div>
 );
 
@@ -109,21 +147,22 @@ export const Globe = ({ className }) => {
         if (!canvasRef.current) return;
 
         const globe = createGlobe(canvasRef.current, {
-            devicePixelRatio: 2,
-            width: 600 * 2,
-            height: 600 * 2,
+            devicePixelRatio: 1,
+            width: 300 * 2,
+            height: 300 * 2,
             phi: 0,
             theta: 0,
             dark: 1,
-            diffuse: 1.2,
-            mapSamples: 16000,
-            mapBrightness: 6,
+            diffuse: 0.8,
+            mapSamples: 4000,
+            mapBrightness: 3,
             baseColor: [0.3, 0.3, 0.3],
             markerColor: [0.1, 0.8, 1],
             glowColor: [1, 1, 1],
             markers: [
                 { location: [37.7595, -122.4367], size: 0.03 },
                 { location: [40.7128, -74.006], size: 0.1 },
+                { location: [22.5937, 78.9629], size: 0.1 },
             ],
             onRender: (state) => {
                 state.phi = phi;
