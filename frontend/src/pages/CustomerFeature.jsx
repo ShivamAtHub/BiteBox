@@ -10,7 +10,7 @@ export function FeaturesSectionDemo() {
             title: "Explore with Browser Menu",
             description: "Quickly browse through restaurants, cuisines, and exclusive offers — all in one intuitive menu.",
             skeleton: <MenuSkeleton />,
-            link: "/",
+            link: "/menu",
             className: "col-span-1 md:col-span-3 border dark:border-neutral-800",
         },
         {
