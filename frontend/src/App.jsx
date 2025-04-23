@@ -7,6 +7,7 @@ import Dashboard from "./pages/CustomerDashboard";
 import { FeaturesSectionDemo } from "./pages/CustomerFeature";
 
 import Menu from "./pages/Menu";
+import CartPage from "./pages/CartPage";
 // import ContactUs from "./pages/ContactUs";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="/features" element={<FeaturesSectionDemo />} />
 
             <Route path="/menu" element={<Menu />} />
+            <Route path="/cart" element={<CartPage />} />
 
             {/* <Route path ="/contact" element={<ContactUs />} /> */}
           </Routes>
