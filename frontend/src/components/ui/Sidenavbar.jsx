@@ -7,6 +7,7 @@ import {
   IconUser,
   IconMenu2,
   IconMapPin,
+  IconShoppingCart,
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -16,9 +17,16 @@ export function SidebarDemo() {
   const toplinks = [
     {
       label: "Browser Menu",
-      href: "#",
+      href: "/menu",
       icon: (
         <IconMenu2 className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
+    {
+      label: "Cart",
+      href: "/",
+      icon: (
+        <IconShoppingCart className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
     {

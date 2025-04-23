@@ -6,6 +6,7 @@ import { Register } from "./pages/Register";
 import Dashboard from "./pages/CustomerDashboard";
 import { FeaturesSectionDemo } from "./pages/CustomerFeature";
 
+import Menu from "./pages/Menu";
 // import ContactUs from "./pages/ContactUs";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/customer-dashboard" element={<Dashboard />} />
             <Route path="/features" element={<FeaturesSectionDemo />} />
 
+            <Route path="/menu" element={<Menu />} />
 
             {/* <Route path ="/contact" element={<ContactUs />} /> */}
           </Routes>
