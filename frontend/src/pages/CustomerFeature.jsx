@@ -10,43 +10,43 @@ export function FeaturesSectionDemo() {
             title: "Explore with Browser Menu",
             description: "Quickly browse through restaurants, cuisines, and exclusive offers — all in one intuitive menu.",
             skeleton: <MenuSkeleton />,
-            link: "/menu",
-            className: "col-span-1 md:col-span-3 border dark:border-neutral-800",
+            link: "/",
+            className: "col-span-1 md:col-span-3 border border-gray-200 bg-white shadow-sm",
         },
         {
             title: "Order History",
             description: "View your past orders with just a click. Reorder favorites or explore what you loved last time.",
             skeleton: <HistorySkeleton />,
-            className: "col-span-1 md:col-span-3 border dark:border-neutral-800",
+            className: "col-span-1 md:col-span-3 border border-gray-200 bg-white shadow-sm",
         },
         {
             title: "Track Order Live",
             description: "Track your order in real-time — from kitchen to doorstep, see exactly where your food is.",
             skeleton: <SkeletonFour />,
-            className: "col-span-1 md:col-span-3 border dark:border-neutral-800",
+            className: "col-span-1 md:col-span-3 border border-gray-200 bg-white shadow-sm",
         },
         {
             title: "Settings",
             description: "Manage account details, notifications, and preferences effortlessly.",
             skeleton: <SettingSkeleton />,
-            className: "col-span-1 md:col-span-3 border dark:border-neutral-800",
+            className: "col-span-1 md:col-span-3 border border-gray-200 bg-white shadow-sm",
         },
     ];
 
     return (
-        <div className="relative z-20 py-8 lg:py-16 max-w-7xl mx-auto">
+        <div className="relative z-20 py-8 lg:py-16 max-w-7xl mx-auto bg-white">
             <div className="px-6">
-                <h4 className="text-2xl lg:text-4xl font-semibold text-center text-black dark:text-white">
+                <h4 className="text-2xl lg:text-4xl font-semibold text-center text-gray-800">
                     Packed with powerful features
                 </h4>
-                <p className="text-sm lg:text-base text-center mt-3 text-neutral-500 dark:text-neutral-300">
+                <p className="text-sm lg:text-base text-center mt-3 text-gray-600">
                     Manage your BiteBox experience easily from one dashboard.
                 </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-6 gap-2 mt-10 rounded-md overflow-hidden">
                 {features.map((feature) => (
                     <FeatureCard key={feature.title} className={feature.className}>
-                        <Link to={feature.link} className="block h-full w-full">
+                        <Link to={feature.link || "#"} className="block h-full w-full">
                             <FeatureTitle>{feature.title}</FeatureTitle>
                             <FeatureDescription>{feature.description}</FeatureDescription>
                             <div className="h-full w-full">{feature.skeleton}</div>
@@ -89,7 +89,7 @@ const FeatureCard = ({ children, className }) => {
                 transformPerspective: 800,
             }}
             className={cn(
-                "p-4 sm:p-6 relative overflow-hidden transition-transform duration-200 ease-in-out will-change-transform",
+                "p-4 sm:p-6 relative overflow-hidden transition-transform duration-200 ease-in-out will-change-transform hover:shadow-md",
                 className
             )}
         >
@@ -98,13 +98,12 @@ const FeatureCard = ({ children, className }) => {
     );
 };
 
-
 const FeatureTitle = ({ children }) => (
-    <p className="text-left text-black dark:text-white text-lg font-medium">{children}</p>
+    <p className="text-left text-gray-800 text-lg font-medium">{children}</p>
 );
 
 const FeatureDescription = ({ children }) => (
-    <p className="text-sm text-left mt-1 text-neutral-600 dark:text-neutral-300 max-w-sm">{children}</p>
+    <p className="text-sm text-left mt-1 text-gray-600 max-w-sm">{children}</p>
 );
 
 // Shared image skeleton for menu/history/settings
@@ -116,7 +115,7 @@ const FadedCornerImage = ({ src, alt }) => (
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.2 }}
-            className="absolute bottom--20 right-0 h-64 w-64 object-cover rotate-[-40deg] rounded-md"
+            className="absolute bottom--20 right-0 h-64 w-64 object-cover rotate-[-40deg] rounded-md shadow-sm"
         />
     </div>
 );
@@ -152,12 +151,12 @@ export const Globe = ({ className }) => {
             height: 300 * 2,
             phi: 0,
             theta: 0,
-            dark: 1,
+            dark: 0,  // This sets the globe to light mode
             diffuse: 0.8,
             mapSamples: 4000,
             mapBrightness: 3,
-            baseColor: [0.3, 0.3, 0.3],
-            markerColor: [0.1, 0.8, 1],
+            baseColor: [0.9, 0.9, 0.9],  // Even lighter base color for white theme
+            markerColor: [0.1, 0.7, 1],  // Slightly adjusted marker color for better visibility
             glowColor: [1, 1, 1],
             markers: [
                 { location: [37.7595, -122.4367], size: 0.03 },

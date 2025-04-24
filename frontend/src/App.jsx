@@ -7,23 +7,30 @@ import { FeaturesSectionDemo } from "./pages/CustomerFeature";
 
 import Menu from "./pages/Menu";
 import CartPage from "./pages/CartPage";
+import OrderTrackingPage from "./pages/OrderTrackingPage";
+import CustomerOrdersPage from "./pages/CustomerOrdersPage";
 // import ContactUs from "./pages/ContactUs";
 
 function App() {
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/customer-dashboard" element={<Dashboard />} />
-        <Route path="/features" element={<FeaturesSectionDemo />} />
+    <Router>
+      <div>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/customer-dashboard" element={<Dashboard />} />
+            <Route path="/features" element={<FeaturesSectionDemo />} />
 
-        <Route path="/menu" element={<Menu />} />
-        <Route path="/cart" element={<CartPage />} />
-        {/* <Route path="/contact" element={<ContactUs />} /> */}
-      </Routes>
-    </div>
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/order-tracking" element={<OrderTrackingPage />} />
+            <Route path="/customer-orders" element={<CustomerOrdersPage />} />
+
+            {/* <Route path ="/contact" element={<ContactUs />} /> */}
+          </Routes>
+      </div>
+    </Router>
   );
 }
 

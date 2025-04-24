@@ -144,17 +144,17 @@ const CartPage = () => {
   };
 
   return (
-    <div className="flex flex-row min-h-screen w-full">
+    <div className="flex flex-row min-h-screen w-full bg-white">
       {/* Side bar - Fixed position */}
-      <div className="sticky top-0 h-screen">
+      <div className="sticky top-0 h-screen bg-white border-r border-gray-100 shadow-sm">
         <Navbar variant="sidebar" />
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 px-6 py-8">
+      <div className="flex-1 px-6 py-8 bg-white">
         <div className="max-w-screen-xl mx-auto">
           <motion.h1 
-            className="text-3xl font-bold mb-8"
+            className="text-3xl font-bold mb-8 text-gray-800"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -171,9 +171,9 @@ const CartPage = () => {
                 initial="hidden"
                 animate="visible"
               >
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Cart Items ({cartItems.length})</CardTitle>
+                <Card className="border border-gray-100 shadow-sm bg-white">
+                  <CardHeader className="border-b border-gray-50">
+                    <CardTitle className="text-gray-800">Cart Items ({cartItems.length})</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ScrollArea className="h-[400px] pr-4">
@@ -191,11 +191,11 @@ const CartPage = () => {
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="h-16 w-16 rounded-md object-cover"
+                                className="h-16 w-16 rounded-md object-cover border border-gray-100"
                               />
                               <div className="flex-1">
-                                <h3 className="font-medium">{item.name}</h3>
-                                <Badge variant="outline" className="mt-1">
+                                <h3 className="font-medium text-gray-800">{item.name}</h3>
+                                <Badge variant="outline" className="mt-1 bg-white text-gray-600 border-gray-200">
                                   {item.category}
                                 </Badge>
                               </div>
@@ -203,23 +203,23 @@ const CartPage = () => {
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  className="h-8 w-8"
+                                  className="h-8 w-8 border-gray-200 text-gray-600 hover:bg-gray-50"
                                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                 >
                                   <Minus className="h-4 w-4" />
                                 </Button>
-                                <span className="w-6 text-center">{item.quantity}</span>
+                                <span className="w-6 text-center text-gray-800">{item.quantity}</span>
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  className="h-8 w-8"
+                                  className="h-8 w-8 border-gray-200 text-gray-600 hover:bg-gray-50"
                                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                 >
                                   <Plus className="h-4 w-4" />
                                 </Button>
                               </div>
                               <div className="text-right">
-                                <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                                <p className="font-medium text-gray-800">${(item.price * item.quantity).toFixed(2)}</p>
                                 <Button
                                   variant="ghost"
                                   size="sm"
@@ -231,7 +231,7 @@ const CartPage = () => {
                                 </Button>
                               </div>
                             </div>
-                            <Separator />
+                            <Separator className="bg-gray-100" />
                           </motion.div>
                         ))}
                       </AnimatePresence>
@@ -247,23 +247,23 @@ const CartPage = () => {
                 initial="hidden"
                 animate="visible"
               >
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Order Summary</CardTitle>
+                <Card className="border border-gray-100 shadow-sm bg-white">
+                  <CardHeader className="border-b border-gray-50">
+                    <CardTitle className="text-gray-800">Order Summary</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div className="flex justify-between">
                         <span className="text-gray-500">Subtotal</span>
-                        <span>${subtotal.toFixed(2)}</span>
+                        <span className="text-gray-800">${subtotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">Tax</span>
-                        <span>${tax.toFixed(2)}</span>
+                        <span className="text-gray-800">${tax.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-500">Delivery Fee</span>
-                        <span>{deliveryFee === 0 ? "Free" : `$${deliveryFee.toFixed(2)}`}</span>
+                        <span className="text-gray-800">{deliveryFee === 0 ? "Free" : `$${deliveryFee.toFixed(2)}`}</span>
                       </div>
                       {discount > 0 && (
                         <motion.div 
@@ -276,22 +276,27 @@ const CartPage = () => {
                           <span>-${discount.toFixed(2)}</span>
                         </motion.div>
                       )}
-                      <Separator />
-                      <div className="flex justify-between font-bold text-lg">
+                      <Separator className="bg-gray-100" />
+                      <div className="flex justify-between font-bold text-lg text-gray-800">
                         <span>Total</span>
                         <span>${total.toFixed(2)}</span>
                       </div>
 
                       {/* Promo Code Input */}
                       <div className="pt-4">
-                        <p className="text-sm mb-2">Promo Code</p>
+                        <p className="text-sm mb-2 text-gray-700">Promo Code</p>
                         <div className="flex gap-2">
                           <Input
                             placeholder="Enter promo code"
                             value={promoCode}
                             onChange={(e) => setPromoCode(e.target.value)}
+                            className="border-gray-200 focus:border-black bg-white"
                           />
-                          <Button onClick={applyPromoCode} variant="outline">
+                          <Button 
+                            onClick={applyPromoCode} 
+                            variant="outline"
+                            className="border-gray-200 hover:bg-gray-50 text-gray-700 hover:text-gray-900"
+                          >
                             Apply
                           </Button>
                         </div>
@@ -304,39 +309,42 @@ const CartPage = () => {
                   <CardFooter>
                     <Sheet open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
                       <SheetTrigger asChild>
-                        <Button className="w-full" size="lg">
+                        <Button 
+                          className="w-full bg-black hover:bg-gray-800 text-white" 
+                          size="lg"
+                        >
                           Proceed to Checkout
                         </Button>
                       </SheetTrigger>
-                      <SheetContent side="right" className="sm:max-w-lg">
+                      <SheetContent side="right" className="sm:max-w-lg bg-white">
                         <SheetHeader>
-                          <SheetTitle>Checkout</SheetTitle>
-                          <SheetDescription>
+                          <SheetTitle className="text-gray-800">Checkout</SheetTitle>
+                          <SheetDescription className="text-gray-500">
                             Complete your order with a few more details
                           </SheetDescription>
                         </SheetHeader>
                         <div className="py-6">
                           <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
-                              <Input placeholder="First Name" />
-                              <Input placeholder="Last Name" />
+                              <Input placeholder="First Name" className="border-gray-200 bg-white" />
+                              <Input placeholder="Last Name" className="border-gray-200 bg-white" />
                             </div>
-                            <Input placeholder="Email Address" />
-                            <Input placeholder="Phone Number" />
-                            <Input placeholder="Delivery Address" />
+                            <Input placeholder="Email Address" className="border-gray-200 bg-white" />
+                            <Input placeholder="Phone Number" className="border-gray-200 bg-white" />
+                            <Input placeholder="Delivery Address" className="border-gray-200 bg-white" />
                             
-                            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                               <div className="flex items-center mb-4">
                                 <Clock className="mr-2 h-5 w-5 text-gray-500" />
                                 <div>
-                                  <p className="font-medium">Estimated Delivery Time</p>
+                                  <p className="font-medium text-gray-800">Estimated Delivery Time</p>
                                   <p className="text-sm text-gray-500">30-45 minutes</p>
                                 </div>
                               </div>
                               <div className="flex items-center">
                                 <CreditCard className="mr-2 h-5 w-5 text-gray-500" />
                                 <div>
-                                  <p className="font-medium">Payment Method</p>
+                                  <p className="font-medium text-gray-800">Payment Method</p>
                                   <p className="text-sm text-gray-500">Pay on delivery</p>
                                 </div>
                               </div>
@@ -344,7 +352,7 @@ const CartPage = () => {
 
                             <div className="pt-4">
                               <Button 
-                                className="w-full" 
+                                className="w-full bg-blue-500 hover:bg-blue-600 text-white" 
                                 size="lg" 
                                 onClick={handleCheckout}
                                 disabled={isLoading}
@@ -362,14 +370,17 @@ const CartPage = () => {
             </div>
           ) : (
             <motion.div 
-              className="text-center py-16"
+              className="text-center py-16 bg-white"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-800">Your cart is empty</h2>
               <p className="text-gray-500 mb-8">Add some delicious items to your cart and come back!</p>
-              <Button asChild>
+              <Button 
+                asChild
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+              >
                 <a href="/menu">Browse Menu</a>
               </Button>
             </motion.div>
