@@ -32,7 +32,7 @@ export function Login() {
     if (!result.success) {
       setError(result.error);
     } else {
-      navigate('/dashboard'); // ✅ Redirect on success
+      navigate('/customer-dashboard'); // ✅ Redirect on success
     }
   };
 
