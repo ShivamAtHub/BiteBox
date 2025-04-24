@@ -13,24 +13,22 @@ import CustomerOrdersPage from "./pages/CustomerOrdersPage";
 
 function App() {
   return (
-    <Router>
-      <div>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/customer-dashboard" element={<Dashboard />} />
-            <Route path="/features" element={<FeaturesSectionDemo />} />
+    <div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/customer-dashboard" element={<Dashboard />} />
+        <Route path="/features" element={<FeaturesSectionDemo />} />
 
-            <Route path="/menu" element={<Menu />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/order-tracking" element={<OrderTrackingPage />} />
-            <Route path="/customer-orders" element={<CustomerOrdersPage />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/order-tracking" element={<OrderTrackingPage />} />
+        <Route path="/customer-orders" element={<CustomerOrdersPage />} />
 
-            {/* <Route path ="/contact" element={<ContactUs />} /> */}
-          </Routes>
-      </div>
-    </Router>
+        {/* <Route path ="/contact" element={<ContactUs />} /> */}
+      </Routes>
+    </div>
   );
 }
 
