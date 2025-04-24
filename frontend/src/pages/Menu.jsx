@@ -351,16 +351,16 @@ const Menu = () => {
   ];
 
   return (
-    <div className="flex flex-row min-h-screen w-full bg-white">
+    <div className="flex flex-row min-h-screen w-full bg-white dark:bg-black">
       {/* Side bar - Fixed position */}
-      <div className="sticky top-0 h-screen bg-white border-r border-gray-100 shadow-sm">
+      <div className="sticky top-0 h-screen bg-white dark:bg-black border-r border-gray-100 dark:border-gray-800 shadow-sm">
         <Navbar variant='sidebar' />
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 px-6 py-8 bg-white">
+      <div className="flex-1 px-6 py-8 bg-white dark:bg-black">
         <div className="max-w-screen-xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-gray-800">Our Menu</h1>
+          <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100">Our Menu</h1>
 
           {/* Filters and Sort Options */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -372,8 +372,8 @@ const Menu = () => {
                   variant={activeCategory === category.id ? "default" : "outline"}
                   className={`cursor-pointer px-4 py-2 text-sm ${
                     activeCategory === category.id 
-                      ? "bg-black hover:bg-gray-800 text-white" 
-                      : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                      ? "bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black" 
+                      : "bg-white dark:bg-black text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
                   }`}
                   onClick={() => setActiveCategory(category.id)}
                 >
@@ -384,10 +384,10 @@ const Menu = () => {
 
             {/* Sort Options */}
             <Select value={sortOption} onValueChange={setSortOption}>
-              <SelectTrigger className="w-48 bg-white border border-gray-200 text-gray-700">
+              <SelectTrigger className="w-48 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
-              <SelectContent className="bg-white border border-gray-200">
+              <SelectContent className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800">
                 <SelectItem value="popular">Most Popular</SelectItem>
                 <SelectItem value="price-low">Price: Low to High</SelectItem>
                 <SelectItem value="price-high">Price: High to Low</SelectItem>
@@ -401,12 +401,12 @@ const Menu = () => {
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {Array(8).fill().map((_, index) => (
-                <div key={index} className="rounded-lg overflow-hidden border border-gray-100 bg-white shadow-sm">
-                  <Skeleton className="h-48 w-full bg-gray-100" />
+                <div key={index} className="rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:bg-black shadow-sm">
+                  <Skeleton className="h-48 w-full bg-gray-100 dark:bg-gray-800" />
                   <div className="p-4">
-                    <Skeleton className="h-6 w-3/4 mb-2 bg-gray-100" />
-                    <Skeleton className="h-4 w-full mb-2 bg-gray-100" />
-                    <Skeleton className="h-4 w-1/2 bg-gray-100" />
+                    <Skeleton className="h-6 w-3/4 mb-2 bg-gray-100 dark:bg-gray-800" />
+                    <Skeleton className="h-4 w-full mb-2 bg-gray-100 dark:bg-gray-800" />
+                    <Skeleton className="h-4 w-1/2 bg-gray-100 dark:bg-gray-800" />
                   </div>
                 </div>
               ))}
@@ -417,13 +417,13 @@ const Menu = () => {
                 {filteredItems.slice(0, visibleItems).map((item, index) => {
                   if (index === visibleItems - 1) {
                     return (
-                      <div ref={lastItemRef} key={item.id} className="bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                      <div ref={lastItemRef} key={item.id} className="bg-white dark:bg-black border border-gray-100 dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
                         <FoodItemCard item={item} />
                       </div>
                     );
                   }
                   return (
-                    <div key={item.id} className="bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div key={item.id} className="bg-white dark:bg-black border border-gray-100 dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
                       <FoodItemCard item={item} />
                     </div>
                   );
@@ -435,7 +435,7 @@ const Menu = () => {
                 <div className="mt-8 flex justify-center" ref={loadMoreRef}>
                   <Button
                     variant="outline"
-                    className="bg-white text-blue-500 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                    className="bg-white dark:bg-black text-blue-500 dark:text-blue-400 border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900 hover:border-blue-300 dark:hover:border-blue-700"
                     onClick={() => setVisibleItems(prev => Math.min(prev + 8, filteredItems.length))}
                   >
                     Load More
@@ -445,8 +445,8 @@ const Menu = () => {
 
               {/* No results message */}
               {filteredItems.length === 0 && !loading && (
-                <div className="text-center py-12 bg-gray-50 rounded-lg">
-                  <p className="text-lg text-gray-500">No items found. Try a different category.</p>
+                <div className="text-center py-12 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                  <p className="text-lg text-gray-500 dark:text-gray-400">No items found. Try a different category.</p>
                 </div>
               )}
             </>

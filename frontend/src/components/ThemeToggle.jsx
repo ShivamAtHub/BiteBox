@@ -38,7 +38,7 @@ export default function ThemeToggle() {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="relative h-8 w-16 overflow-hidden rounded-full bg-gradient-to-r from-gray-300 to-gray-200 shadow-inner transition-colors duration-300 dark:from-slate-800 dark:to-slate-700"
+      className="relative h-8 w-16 overflow-hidden rounded-full bg-gradient-to-r from-gray-300 to-gray-200 shadow-inner transition-colors duration-300 dark:from-slate-900 dark:to-slate-800"
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.2 }}

@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "../../lib/utils";
 import { useMotionValue, motion, useMotionTemplate } from "motion/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export const HeroHighlight = ({
   children,
@@ -10,6 +10,12 @@ export const HeroHighlight = ({
 }) => {
   let mouseX = useMotionValue(0);
   let mouseY = useMotionValue(0);
+  const [mounted, setMounted] = useState(false);
+
+  // Mount check to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // SVG patterns for different states and themes
   const dotPatterns = {
@@ -34,63 +40,71 @@ export const HeroHighlight = ({
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
   }
+
+  const maskImage = useMotionTemplate`
+    radial-gradient(
+      200px circle at ${mouseX}px ${mouseY}px,
+      black 0%,
+      transparent 100%
+    )
+  `;
+
+  if (!mounted) {
+    return null; // Prevent rendering until client-side to avoid hydration mismatch
+  }
+
   return (
     <div
       className={cn(
-        "group relative flex min-h-screen w-full items-center justify-center bg-white dark:bg-black",
+        "group relative flex min-h-screen w-full items-center justify-center bg-white dark:bg-black transition-colors duration-300",
         containerClassName
       )}
       onMouseMove={handleMouseMove}>
-        <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white dark:from-black to-transparent pointer-events-none z-30" />
+      {/* Top gradient */}
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white dark:from-black to-transparent pointer-events-none z-30" />
+      
+      {/* Light mode pattern - default */}
       <div
         className="pointer-events-none absolute inset-0 dark:hidden"
         style={{
           backgroundImage: dotPatterns.light.default,
-        }} />
+        }} 
+      />
+      
+      {/* Dark mode pattern - default */}
       <div
         className="pointer-events-none absolute inset-0 hidden dark:block"
         style={{
           backgroundImage: dotPatterns.dark.default,
-        }} />
+        }} 
+      />
+      
+      {/* Light mode pattern - hover */}
       <motion.div
         className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100 dark:hidden"
         style={{
           backgroundImage: dotPatterns.light.hover,
-          WebkitMaskImage: useMotionTemplate`
-            radial-gradient(
-              200px circle at ${mouseX}px ${mouseY}px,
-              black 0%,
-              transparent 100%
-            )
-          `,
-          maskImage: useMotionTemplate`
-            radial-gradient(
-              200px circle at ${mouseX}px ${mouseY}px,
-              black 0%,
-              transparent 100%
-            )
-          `,
-        }} />
+          WebkitMaskImage: maskImage,
+          maskImage: maskImage,
+        }} 
+      />
+      
+      {/* Dark mode pattern - hover */}
       <motion.div
         className="pointer-events-none absolute inset-0 hidden opacity-0 transition duration-300 group-hover:opacity-100 dark:block"
         style={{
           backgroundImage: dotPatterns.dark.hover,
-          WebkitMaskImage: useMotionTemplate`
-            radial-gradient(
-              200px circle at ${mouseX}px ${mouseY}px,
-              black 0%,
-              transparent 100%
-            )
-          `,
-          maskImage: useMotionTemplate`
-            radial-gradient(
-              200px circle at ${mouseX}px ${mouseY}px,
-              black 0%,
-              transparent 100%
-            )
-          `,
-        }} />
-      <div className={cn("relative z-20", className)}>{children}</div>
+          WebkitMaskImage: maskImage,
+          maskImage: maskImage,
+        }} 
+      />
+      
+      {/* Content */}
+      <div className={cn("relative z-20", className)}>
+        {children}
+      </div>
+      
+      {/* Bottom gradient */}
       <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white dark:from-black to-transparent pointer-events-none z-30" />
     </div>
   );
@@ -119,7 +133,7 @@ export const Highlight = ({
         display: "inline",
       }}
       className={cn(
-        `relative inline-block rounded-lg bg-gradient-to-r from-indigo-300 to-purple-300 px-1 pb-1 dark:from-indigo-500 dark:to-purple-500`,
+        `relative inline-block rounded-lg bg-gradient-to-r from-indigo-300 to-purple-300 px-1 pb-1 dark:from-indigo-500 dark:to-purple-500 text-black dark:text-white transition-colors duration-300`,
         className
       )}>
       {children}
