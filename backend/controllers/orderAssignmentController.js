@@ -3,6 +3,7 @@
 import User from '../models/User.js';
 // Change this line in orderAssignmentController.js
 import { Order } from '../models/Order.js';
+const RoundRobin = require('../algorithms/roundRobin');
 
 // Priority weights
 const PRIORITY_WEIGHTS = {
@@ -63,6 +64,57 @@ async function calculateDriverScores(order) {
   }));
   
   return scoredDrivers.sort((a, b) => a.combinedScore - b.combinedScore);
+}
+
+// Initialize Round Robin scheduler
+const roundRobinScheduler = new RoundRobin();
+
+// Update available drivers in the Round Robin scheduler
+async function updateAvailableDrivers() {
+  const availableDrivers = await User.find({
+    role: 'driver',
+    availability: true,
+    $expr: { $lt: [{ $size: "$activeOrders" }, "$maxWorkload"] }
+  });
+  
+  // Clear existing drivers
+  roundRobinScheduler.drivers = [];
+  
+  // Add available drivers
+  availableDrivers.forEach(driver => {
+    roundRobinScheduler.addDriver(driver);
+  });
+}
+
+// Assign order using Round Robin
+async function assignOrderRoundRobin(order) {
+  try {
+    // Update available drivers
+    await updateAvailableDrivers();
+    
+    // Get next driver using Round Robin
+    const driver = roundRobinScheduler.getNextDriver();
+    
+    // Assign order to driver
+    driver.activeOrders.push(order._id);
+    await driver.save();
+    
+    // Update order with driver assignment
+    order.assignedDriver = driver._id;
+    order.status = 'assigned';
+    await order.save();
+    
+    return {
+      success: true,
+      driver,
+      order
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message
+    };
+  }
 }
 
 // Controller methods
@@ -153,3 +205,8 @@ export const autoAssignPendingOrders = async (req, res) => {
 };
 
 // Add other controller methods (getAssignmentAnalytics, manualAssignOrder) here...
+
+module.exports = {
+  assignOrderRoundRobin,
+  updateAvailableDrivers
+};

@@ -1,31 +1,49 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  customerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  customerName: {
+    type: String,
     required: true
   },
   items: [{
-    name: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    price: { type: Number, required: true }
+    name: String,
+    price: Number,
+    quantity: Number
   }],
-  priority: {
-    type: String,
-    enum: ['High', 'Medium', 'Low'],
-    default: 'Medium'
-  },
-  assignedTo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+  totalAmount: {
+    type: Number,
+    required: true
   },
   status: {
     type: String,
-    enum: ['Pending', 'Assigned', 'PickedUp', 'InTransit', 'Delivered', 'Cancelled'],
-    default: 'Pending'
+    enum: ['pending', 'assigned', 'in-progress', 'delivered', 'cancelled'],
+    default: 'pending'
+  },
+  assignedDriver: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  pickupLocation: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  },
+  deliveryAddress: {
+    type: String,
+    required: true
+  },
+  isTestData: {
+    type: Boolean,
+    default: false
   }
-}, { timestamps: true });
+}, {
+  timestamps: true
+});
 
-// Change to default export
-export default mongoose.model('Order', orderSchema);
+module.exports = mongoose.model('Order', orderSchema);

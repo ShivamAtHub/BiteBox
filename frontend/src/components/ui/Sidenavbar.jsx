@@ -7,6 +7,7 @@ import {
   IconMenu2,
   IconMapPin,
   IconShoppingCart,
+  IconUsers,
 } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -40,6 +41,13 @@ export function SidebarDemo() {
       href: "/customer-orders",
       icon: (
         <IconHistory className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
+    {
+      label: "Test Round Robin",
+      href: "/round-robin-test",
+      icon: (
+        <IconUsers className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
   ];

@@ -4,7 +4,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:roundrobin": "node scripts/testRoundRobin.js",
+    "verify:roundrobin": "node scripts/verifyRoundRobin.js",
+    "test:watch": "jest --watch",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
