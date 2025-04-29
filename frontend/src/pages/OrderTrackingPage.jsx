@@ -129,14 +129,14 @@ const OrderTrackingPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-row min-h-screen w-full bg-white">
+    <div className="flex flex-row min-h-screen w-full bg-white dark:bg-black">
       {/* Side bar - Fixed position */}
-      <div className="sticky top-0 h-screen bg-white border-r border-gray-100 shadow-sm">
+      <div className="sticky top-0 h-screen bg-white dark:bg-black border-r border-gray-100 dark:border-zinc-800 shadow-sm">
         <Navbar variant="sidebar" />
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 px-6 py-8 bg-white">
+      <div className="flex-1 px-6 py-8 bg-white dark:bg-black">
         <div className="max-w-screen-xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -144,10 +144,10 @@ const OrderTrackingPage = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-800">Track Your Order</h1>
+              <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Track Your Order</h1>
               <div className="flex items-center">
                 <Clock className="mr-2 h-5 w-5 text-blue-500" />
-                <span className="text-lg font-semibold text-gray-700">Order #{orderDetails.orderId}</span>
+                <span className="text-lg font-semibold text-gray-700 dark:text-gray-200">Order #{orderDetails.orderId}</span>
               </div>
             </div>
 
@@ -155,14 +155,14 @@ const OrderTrackingPage = () => {
               {/* Left column - Status & Driver */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Status Timeline */}
-                <Card className="border border-gray-100 shadow-sm bg-white">
-                  <CardHeader className="border-b border-gray-50">
-                    <CardTitle className="text-gray-800">Delivery Status</CardTitle>
+                <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
+                  <CardHeader className="border-b border-gray-50 dark:border-zinc-800">
+                    <CardTitle className="text-gray-800 dark:text-white">Delivery Status</CardTitle>
                   </CardHeader>
                   <CardContent className="pt-6">
                     <div className="relative">
                       {/* Timeline line */}
-                      <div className="absolute left-7 top-0 h-full w-0.5 bg-gray-100"></div>
+                      <div className="absolute left-7 top-0 h-full w-0.5 bg-gray-100 dark:bg-zinc-800"></div>
                       
                       {/* Timeline steps */}
                       {timelineSteps.map((step, index) => {
@@ -178,8 +178,8 @@ const OrderTrackingPage = () => {
                             <motion.div 
                               className={`z-10 flex items-center justify-center w-14 h-14 rounded-full ${
                                 isCompleted 
-                                  ? 'bg-blue-50 text-blue-500 border-2 border-blue-200' 
-                                  : 'bg-gray-50 text-gray-400 border-2 border-gray-200'
+                                  ? 'bg-blue-50 dark:bg-blue-950 text-blue-500 border-2 border-blue-200 dark:border-blue-800' 
+                                  : 'bg-gray-50 dark:bg-zinc-900 text-gray-400 dark:text-gray-500 border-2 border-gray-200 dark:border-zinc-700'
                               }`}
                               initial={false}
                               animate={isActive ? { scale: [1, 1.1, 1] } : {}}
@@ -188,14 +188,14 @@ const OrderTrackingPage = () => {
                               <step.icon className="h-6 w-6" />
                             </motion.div>
                             <div className="ml-6">
-                              <h3 className={`font-medium ${isCompleted ? 'text-gray-800' : 'text-gray-500'}`}>
+                              <h3 className={`font-medium ${isCompleted ? 'text-gray-800 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
                                 {step.label}
                               </h3>
-                              <p className={`text-sm ${isCompleted ? 'text-gray-600' : 'text-gray-400'}`}>
+                              <p className={`text-sm ${isCompleted ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}`}>
                                 {isCompleted ? step.time : 'Pending'}
                               </p>
                               {isActive && step.id === 'on-the-way' && (
-                                <Badge className="mt-2 bg-blue-50 text-blue-600 border-blue-100">
+                                <Badge className="mt-2 bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900">
                                   {estimatedTime} min away
                                 </Badge>
                               )}
@@ -214,13 +214,13 @@ const OrderTrackingPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <Card className="border border-gray-100 shadow-sm bg-white">
-                      <CardHeader className="border-b border-gray-50">
-                        <CardTitle className="text-gray-800">Your Delivery Driver</CardTitle>
+                    <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
+                      <CardHeader className="border-b border-gray-50 dark:border-zinc-800">
+                        <CardTitle className="text-gray-800 dark:text-white">Your Delivery Driver</CardTitle>
                       </CardHeader>
                       <CardContent className="pt-6">
                         <div className="flex items-center">
-                          <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-gray-100">
+                          <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-gray-100 dark:border-zinc-700">
                             <img 
                               src={driver.photo} 
                               alt={driver.name} 
@@ -228,17 +228,17 @@ const OrderTrackingPage = () => {
                             />
                           </div>
                           <div className="ml-4 flex-1">
-                            <h3 className="font-medium text-gray-800">{driver.name}</h3>
+                            <h3 className="font-medium text-gray-800 dark:text-white">{driver.name}</h3>
                             <div className="flex items-center mt-1">
                               <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                              <span className="ml-1 text-sm text-gray-600">{driver.rating}</span>
+                              <span className="ml-1 text-sm text-gray-600 dark:text-gray-300">{driver.rating}</span>
                             </div>
                           </div>
                           <div className="flex space-x-2">
-                            <Button variant="outline" size="icon" className="bg-white border-gray-200 text-gray-700 hover:bg-gray-50">
+                            <Button variant="outline" size="icon" className="bg-white dark:bg-black border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-900">
                               <Phone className="h-4 w-4" />
                             </Button>
-                            <Button variant="outline" size="icon" className="bg-white border-gray-200 text-gray-700 hover:bg-gray-50">
+                            <Button variant="outline" size="icon" className="bg-white dark:bg-black border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-900">
                               <MessageCircle className="h-4 w-4" />
                             </Button>
                           </div>
@@ -249,14 +249,14 @@ const OrderTrackingPage = () => {
                 )}
 
                 {/* Delivery Map */}
-                <Card className="border border-gray-100 shadow-sm bg-white">
-                  <CardHeader className="border-b border-gray-50">
-                    <CardTitle className="text-gray-800">Delivery Location</CardTitle>
+                <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
+                  <CardHeader className="border-b border-gray-50 dark:border-zinc-800">
+                    <CardTitle className="text-gray-800 dark:text-white">Delivery Location</CardTitle>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <div className="h-64 bg-gray-100 relative">
+                    <div className="h-64 bg-gray-100 dark:bg-zinc-900 relative">
                       {/* In a real app, this would be a real map component */}
-                      <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+                      <div className="absolute inset-0 flex items-center justify-center text-gray-500 dark:text-gray-400">
                         <div className="text-center">
                           <MapPin className="h-8 w-8 mx-auto mb-2" />
                           <p>Map showing delivery route</p>
@@ -273,14 +273,14 @@ const OrderTrackingPage = () => {
               {/* Right column - Order Summary */}
               <div className="space-y-6">
                 {/* Estimated Delivery */}
-                <Card className="border border-gray-100 shadow-sm bg-white">
+                <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <h3 className="text-lg font-medium text-gray-700 mb-2">Estimated Delivery</h3>
-                      <div className="text-3xl font-bold text-gray-800 mb-2">
+                      <h3 className="text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">Estimated Delivery</h3>
+                      <div className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
                         {orderStatus === 'delivered' ? 'Delivered!' : `${estimatedTime} minutes`}
                       </div>
-                      <p className="text-gray-500 text-sm">
+                      <p className="text-gray-500 dark:text-gray-400 text-sm">
                         {orderStatus === 'delivered' 
                           ? 'Your order has been delivered' 
                           : `${
@@ -297,44 +297,44 @@ const OrderTrackingPage = () => {
                 </Card>
 
                 {/* Order Details */}
-                <Card className="border border-gray-100 shadow-sm bg-white">
-                  <CardHeader className="border-b border-gray-50">
-                    <CardTitle className="text-gray-800">Order Summary</CardTitle>
+                <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
+                  <CardHeader className="border-b border-gray-50 dark:border-zinc-800">
+                    <CardTitle className="text-gray-800 dark:text-white">Order Summary</CardTitle>
                   </CardHeader>
                   <CardContent className="py-4">
-                    <p className="text-sm text-gray-500 mb-4">Ordered {orderDetails.orderTime}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Ordered {orderDetails.orderTime}</p>
                     <div className="space-y-3">
                       {orderDetails.items.map(item => (
                         <div key={item.id} className="flex justify-between">
                           <div>
-                            <span className="text-gray-700">{item.quantity}x </span>
-                            <span className="text-gray-800">{item.name}</span>
+                            <span className="text-gray-700 dark:text-gray-300">{item.quantity}x </span>
+                            <span className="text-gray-800 dark:text-white">{item.name}</span>
                           </div>
-                          <span className="text-gray-700">${item.price.toFixed(2)}</span>
+                          <span className="text-gray-700 dark:text-gray-300">${item.price.toFixed(2)}</span>
                         </div>
                       ))}
                     </div>
 
-                    <Separator className="my-4 bg-gray-100" />
+                    <Separator className="my-4 bg-gray-100 dark:bg-zinc-800" />
                     
                     <div className="space-y-2">
-                      <div className="flex justify-between text-gray-600">
+                      <div className="flex justify-between text-gray-600 dark:text-gray-400">
                         <span>Subtotal</span>
                         <span>${orderDetails.subtotal.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between text-gray-600">
+                      <div className="flex justify-between text-gray-600 dark:text-gray-400">
                         <span>Delivery Fee</span>
                         <span>${orderDetails.deliveryFee.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between text-gray-600">
+                      <div className="flex justify-between text-gray-600 dark:text-gray-400">
                         <span>Tax</span>
                         <span>${orderDetails.tax.toFixed(2)}</span>
                       </div>
                     </div>
 
-                    <Separator className="my-4 bg-gray-100" />
+                    <Separator className="my-4 bg-gray-100 dark:bg-zinc-800" />
                     
-                    <div className="flex justify-between font-medium text-gray-800">
+                    <div className="flex justify-between font-medium text-gray-800 dark:text-white">
                       <span>Total</span>
                       <span>${orderDetails.total.toFixed(2)}</span>
                     </div>
@@ -342,19 +342,19 @@ const OrderTrackingPage = () => {
                 </Card>
 
                 {/* Delivery Address */}
-                <Card className="border border-gray-100 shadow-sm bg-white">
-                  <CardHeader className="border-b border-gray-50">
-                    <CardTitle className="text-gray-800">Delivery Details</CardTitle>
+                <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
+                  <CardHeader className="border-b border-gray-50 dark:border-zinc-800">
+                    <CardTitle className="text-gray-800 dark:text-white">Delivery Details</CardTitle>
                   </CardHeader>
                   <CardContent className="py-4">
                     <div className="space-y-2">
                       <div>
-                        <p className="text-sm text-gray-500">Address</p>
-                        <p className="text-gray-700">{orderDetails.deliveryAddress}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Address</p>
+                        <p className="text-gray-700 dark:text-gray-300">{orderDetails.deliveryAddress}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Payment Method</p>
-                        <p className="text-gray-700">{orderDetails.paymentMethod}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Payment Method</p>
+                        <p className="text-gray-700 dark:text-gray-300">{orderDetails.paymentMethod}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -365,46 +365,46 @@ const OrderTrackingPage = () => {
                   <DialogTrigger asChild>
                     <Button 
                       variant="outline" 
-                      className="w-full bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+                      className="w-full bg-white dark:bg-black border-gray-200 dark:border-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-900"
                     >
-                      <AlertCircle className="h-4 w-4 mr-2 text-red-500" />
+                      <AlertCircle className="h-4 w-4 mr-2 text-red-500 dark:text-red-400" />
                       Report an Issue
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-white">
+                  <DialogContent className="bg-white dark:bg-black border-gray-100 dark:border-zinc-800">
                     <DialogHeader>
-                      <DialogTitle className="text-gray-800">Report an Issue</DialogTitle>
-                      <DialogDescription className="text-gray-500">
+                      <DialogTitle className="text-gray-800 dark:text-white">Report an Issue</DialogTitle>
+                      <DialogDescription className="text-gray-500 dark:text-gray-400">
                         Let us know what's wrong with your order and we'll help resolve it.
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                       <Select>
-                        <SelectTrigger className="w-full bg-white border-gray-200">
+                        <SelectTrigger className="w-full bg-white dark:bg-black border-gray-200 dark:border-zinc-700 text-gray-800 dark:text-white">
                           <SelectValue placeholder="Select issue type" />
                         </SelectTrigger>
-                        <SelectContent className="bg-white">
-                          <SelectItem value="missing">Missing items</SelectItem>
-                          <SelectItem value="wrong">Wrong items</SelectItem>
-                          <SelectItem value="quality">Food quality</SelectItem>
-                          <SelectItem value="delivery">Delivery problem</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                        <SelectContent className="bg-white dark:bg-black border-gray-100 dark:border-zinc-800">
+                          <SelectItem value="missing" className="text-gray-800 dark:text-white">Missing items</SelectItem>
+                          <SelectItem value="wrong" className="text-gray-800 dark:text-white">Wrong items</SelectItem>
+                          <SelectItem value="quality" className="text-gray-800 dark:text-white">Food quality</SelectItem>
+                          <SelectItem value="delivery" className="text-gray-800 dark:text-white">Delivery problem</SelectItem>
+                          <SelectItem value="other" className="text-gray-800 dark:text-white">Other</SelectItem>
                         </SelectContent>
                       </Select>
                       <Textarea 
                         placeholder="Please describe the issue in detail..." 
-                        className="min-h-32 bg-white border-gray-200"
+                        className="min-h-32 bg-white dark:bg-black border-gray-200 dark:border-zinc-700 text-gray-800 dark:text-white"
                       />
                     </div>
                     <DialogFooter>
                       <Button 
                         variant="outline"
-                        className="bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+                        className="bg-white dark:bg-black border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-900"
                         onClick={() => setReportDialogOpen(false)}
                       >
                         Cancel
                       </Button>
-                      <Button className="bg-black hover:bg-gray-800 text-white">
+                      <Button className="bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black">
                         Submit Report
                       </Button>
                     </DialogFooter>

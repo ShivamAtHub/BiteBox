@@ -144,17 +144,17 @@ const CartPage = () => {
   };
 
   return (
-    <div className="flex flex-row min-h-screen w-full bg-white">
+    <div className="flex flex-row min-h-screen w-full bg-white dark:bg-black">
       {/* Side bar - Fixed position */}
-      <div className="sticky top-0 h-screen bg-white border-r border-gray-100 shadow-sm">
+      <div className="sticky top-0 h-screen bg-white dark:bg-black border-r border-gray-100 dark:border-zinc-800 shadow-sm">
         <Navbar variant="sidebar" />
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 px-6 py-8 bg-white">
+      <div className="flex-1 px-6 py-8 bg-white dark:bg-black">
         <div className="max-w-screen-xl mx-auto">
           <motion.h1 
-            className="text-3xl font-bold mb-8 text-gray-800"
+            className="text-3xl font-bold mb-8 text-gray-800 dark:text-white"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -171,9 +171,9 @@ const CartPage = () => {
                 initial="hidden"
                 animate="visible"
               >
-                <Card className="border border-gray-100 shadow-sm bg-white">
-                  <CardHeader className="border-b border-gray-50">
-                    <CardTitle className="text-gray-800">Cart Items ({cartItems.length})</CardTitle>
+                <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
+                  <CardHeader className="border-b border-gray-50 dark:border-zinc-800">
+                    <CardTitle className="text-gray-800 dark:text-white">Cart Items ({cartItems.length})</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ScrollArea className="h-[400px] pr-4">
@@ -191,11 +191,11 @@ const CartPage = () => {
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="h-16 w-16 rounded-md object-cover border border-gray-100"
+                                className="h-16 w-16 rounded-md object-cover border border-gray-100 dark:border-zinc-800"
                               />
                               <div className="flex-1">
-                                <h3 className="font-medium text-gray-800">{item.name}</h3>
-                                <Badge variant="outline" className="mt-1 bg-white text-gray-600 border-gray-200">
+                                <h3 className="font-medium text-gray-800 dark:text-white">{item.name}</h3>
+                                <Badge variant="outline" className="mt-1 bg-white dark:bg-black text-gray-600 dark:text-gray-300 border-gray-200 dark:border-zinc-700">
                                   {item.category}
                                 </Badge>
                               </div>
@@ -203,27 +203,27 @@ const CartPage = () => {
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  className="h-8 w-8 border-gray-200 text-gray-600 hover:bg-gray-50"
+                                  className="h-8 w-8 border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-900"
                                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                 >
                                   <Minus className="h-4 w-4" />
                                 </Button>
-                                <span className="w-6 text-center text-gray-800">{item.quantity}</span>
+                                <span className="w-6 text-center text-gray-800 dark:text-white">{item.quantity}</span>
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  className="h-8 w-8 border-gray-200 text-gray-600 hover:bg-gray-50"
+                                  className="h-8 w-8 border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-900"
                                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                 >
                                   <Plus className="h-4 w-4" />
                                 </Button>
                               </div>
                               <div className="text-right">
-                                <p className="font-medium text-gray-800">${(item.price * item.quantity).toFixed(2)}</p>
+                                <p className="font-medium text-gray-800 dark:text-white">${(item.price * item.quantity).toFixed(2)}</p>
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-8 px-2 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                  className="h-8 px-2 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950"
                                   onClick={() => removeItem(item.id)}
                                 >
                                   <Trash2 className="h-4 w-4 mr-1" />
@@ -231,7 +231,7 @@ const CartPage = () => {
                                 </Button>
                               </div>
                             </div>
-                            <Separator className="bg-gray-100" />
+                            <Separator className="bg-gray-100 dark:bg-zinc-800" />
                           </motion.div>
                         ))}
                       </AnimatePresence>
@@ -247,27 +247,27 @@ const CartPage = () => {
                 initial="hidden"
                 animate="visible"
               >
-                <Card className="border border-gray-100 shadow-sm bg-white">
-                  <CardHeader className="border-b border-gray-50">
-                    <CardTitle className="text-gray-800">Order Summary</CardTitle>
+                <Card className="border border-gray-100 dark:border-zinc-800 shadow-sm bg-white dark:bg-black">
+                  <CardHeader className="border-b border-gray-50 dark:border-zinc-800">
+                    <CardTitle className="text-gray-800 dark:text-white">Order Summary</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Subtotal</span>
-                        <span className="text-gray-800">${subtotal.toFixed(2)}</span>
+                        <span className="text-gray-500 dark:text-gray-400">Subtotal</span>
+                        <span className="text-gray-800 dark:text-white">${subtotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Tax</span>
-                        <span className="text-gray-800">${tax.toFixed(2)}</span>
+                        <span className="text-gray-500 dark:text-gray-400">Tax</span>
+                        <span className="text-gray-800 dark:text-white">${tax.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Delivery Fee</span>
-                        <span className="text-gray-800">{deliveryFee === 0 ? "Free" : `$${deliveryFee.toFixed(2)}`}</span>
+                        <span className="text-gray-500 dark:text-gray-400">Delivery Fee</span>
+                        <span className="text-gray-800 dark:text-white">{deliveryFee === 0 ? "Free" : `$${deliveryFee.toFixed(2)}`}</span>
                       </div>
                       {discount > 0 && (
                         <motion.div 
-                          className="flex justify-between text-green-600"
+                          className="flex justify-between text-green-600 dark:text-green-400"
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           transition={{ duration: 0.3 }}
@@ -276,31 +276,31 @@ const CartPage = () => {
                           <span>-${discount.toFixed(2)}</span>
                         </motion.div>
                       )}
-                      <Separator className="bg-gray-100" />
-                      <div className="flex justify-between font-bold text-lg text-gray-800">
+                      <Separator className="bg-gray-100 dark:bg-zinc-800" />
+                      <div className="flex justify-between font-bold text-lg text-gray-800 dark:text-white">
                         <span>Total</span>
                         <span>${total.toFixed(2)}</span>
                       </div>
 
                       {/* Promo Code Input */}
                       <div className="pt-4">
-                        <p className="text-sm mb-2 text-gray-700">Promo Code</p>
+                        <p className="text-sm mb-2 text-gray-700 dark:text-gray-300">Promo Code</p>
                         <div className="flex gap-2">
                           <Input
                             placeholder="Enter promo code"
                             value={promoCode}
                             onChange={(e) => setPromoCode(e.target.value)}
-                            className="border-gray-200 focus:border-black bg-white"
+                            className="border-gray-200 dark:border-zinc-700 focus:border-black dark:focus:border-white bg-white dark:bg-black text-gray-800 dark:text-white"
                           />
                           <Button 
                             onClick={applyPromoCode} 
                             variant="outline"
-                            className="border-gray-200 hover:bg-gray-50 text-gray-700 hover:text-gray-900"
+                            className="border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-900 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                           >
                             Apply
                           </Button>
                         </div>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                           Try "WELCOME15" for 15% off or "FREESHIP" for free delivery
                         </p>
                       </div>
@@ -310,42 +310,42 @@ const CartPage = () => {
                     <Sheet open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
                       <SheetTrigger asChild>
                         <Button 
-                          className="w-full bg-black hover:bg-gray-800 text-white" 
+                          className="w-full bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black" 
                           size="lg"
                         >
                           Proceed to Checkout
                         </Button>
                       </SheetTrigger>
-                      <SheetContent side="right" className="sm:max-w-lg bg-white">
+                      <SheetContent side="right" className="sm:max-w-lg bg-white dark:bg-black border-gray-100 dark:border-zinc-800">
                         <SheetHeader>
-                          <SheetTitle className="text-gray-800">Checkout</SheetTitle>
-                          <SheetDescription className="text-gray-500">
+                          <SheetTitle className="text-gray-800 dark:text-white">Checkout</SheetTitle>
+                          <SheetDescription className="text-gray-500 dark:text-gray-400">
                             Complete your order with a few more details
                           </SheetDescription>
                         </SheetHeader>
                         <div className="py-6">
                           <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
-                              <Input placeholder="First Name" className="border-gray-200 bg-white" />
-                              <Input placeholder="Last Name" className="border-gray-200 bg-white" />
+                              <Input placeholder="First Name" className="border-gray-200 dark:border-zinc-700 bg-white dark:bg-black text-gray-800 dark:text-white" />
+                              <Input placeholder="Last Name" className="border-gray-200 dark:border-zinc-700 bg-white dark:bg-black text-gray-800 dark:text-white" />
                             </div>
-                            <Input placeholder="Email Address" className="border-gray-200 bg-white" />
-                            <Input placeholder="Phone Number" className="border-gray-200 bg-white" />
-                            <Input placeholder="Delivery Address" className="border-gray-200 bg-white" />
+                            <Input placeholder="Email Address" className="border-gray-200 dark:border-zinc-700 bg-white dark:bg-black text-gray-800 dark:text-white" />
+                            <Input placeholder="Phone Number" className="border-gray-200 dark:border-zinc-700 bg-white dark:bg-black text-gray-800 dark:text-white" />
+                            <Input placeholder="Delivery Address" className="border-gray-200 dark:border-zinc-700 bg-white dark:bg-black text-gray-800 dark:text-white" />
                             
-                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                            <div className="bg-gray-50 dark:bg-zinc-900 p-4 rounded-lg border border-gray-100 dark:border-zinc-800">
                               <div className="flex items-center mb-4">
-                                <Clock className="mr-2 h-5 w-5 text-gray-500" />
+                                <Clock className="mr-2 h-5 w-5 text-gray-500 dark:text-gray-400" />
                                 <div>
-                                  <p className="font-medium text-gray-800">Estimated Delivery Time</p>
-                                  <p className="text-sm text-gray-500">30-45 minutes</p>
+                                  <p className="font-medium text-gray-800 dark:text-white">Estimated Delivery Time</p>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">30-45 minutes</p>
                                 </div>
                               </div>
                               <div className="flex items-center">
-                                <CreditCard className="mr-2 h-5 w-5 text-gray-500" />
+                                <CreditCard className="mr-2 h-5 w-5 text-gray-500 dark:text-gray-400" />
                                 <div>
-                                  <p className="font-medium text-gray-800">Payment Method</p>
-                                  <p className="text-sm text-gray-500">Pay on delivery</p>
+                                  <p className="font-medium text-gray-800 dark:text-white">Payment Method</p>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">Pay on delivery</p>
                                 </div>
                               </div>
                             </div>
@@ -370,13 +370,13 @@ const CartPage = () => {
             </div>
           ) : (
             <motion.div 
-              className="text-center py-16 bg-white"
+              className="text-center py-16 bg-white dark:bg-black"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="text-2xl font-semibold mb-4 text-gray-800">Your cart is empty</h2>
-              <p className="text-gray-500 mb-8">Add some delicious items to your cart and come back!</p>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Your cart is empty</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-8">Add some delicious items to your cart and come back!</p>
               <Button 
                 asChild
                 className="bg-blue-500 hover:bg-blue-600 text-white"

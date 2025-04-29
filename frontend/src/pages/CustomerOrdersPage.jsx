@@ -70,26 +70,35 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
   };
 
   const statusColors = {
-    active: "bg-yellow-50 text-yellow-600 border-yellow-100",
-    delivered: "bg-green-50 text-green-600 border-green-100",
-    cancelled: "bg-red-50 text-red-600 border-red-100"
+    active: {
+      light: "bg-yellow-50 text-yellow-600 border-yellow-100",
+      dark: "bg-yellow-900/20 text-yellow-400 border-yellow-900/30"
+    },
+    delivered: {
+      light: "bg-green-50 text-green-600 border-green-100",
+      dark: "bg-green-900/20 text-green-400 border-green-900/30"
+    },
+    cancelled: {
+      light: "bg-red-50 text-red-600 border-red-100",
+      dark: "bg-red-900/20 text-red-400 border-red-900/30"
+    }
   };
 
   return (
     <Card 
-      className="border border-gray-100 shadow-sm bg-white mb-4 hover:shadow-md transition-shadow"
+      className="border border-gray-100 dark:border-black/20 shadow-sm bg-white dark:bg-black/10 mb-4 hover:shadow-md transition-shadow"
       onClick={toggleExpand}
     >
       <CardHeader className="p-4 flex flex-row items-center justify-between">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-          <div className="font-medium text-gray-800">#{order.orderId}</div>
-          <div className="text-sm text-gray-500 flex items-center">
+          <div className="font-medium text-gray-800 dark:text-white">#{order.orderId}</div>
+          <div className="text-sm text-gray-500 dark:text-white/60 flex items-center">
             <CalendarIcon className="h-4 w-4 mr-1" />
             {order.orderDate}
           </div>
         </div>
         <div className="flex gap-2 items-center">
-          <Badge className={statusColors[order.status]}>
+          <Badge className={`${statusColors[order.status].light} dark:${statusColors[order.status].dark}`}>
             {order.status === "active" ? "In Progress" : 
              order.status === "delivered" ? "Delivered" : "Cancelled"}
           </Badge>
@@ -97,7 +106,7 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
             <Button 
               variant="outline" 
               size="sm" 
-              className="bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+              className="bg-white dark:bg-black/20 border-gray-200 dark:border-black/10 text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-black/30"
               onClick={(e) => {
                 e.stopPropagation();
                 onViewDetails(order);
@@ -113,13 +122,13 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
       <CardContent className="px-4 pb-0">
         <div className="flex justify-between items-center">
           <div>
-            <div className="text-sm text-gray-800 font-medium">{order.restaurant}</div>
-            <div className="text-sm text-gray-500 flex items-center mt-1">
+            <div className="text-sm text-gray-800 dark:text-white font-medium">{order.restaurant}</div>
+            <div className="text-sm text-gray-500 dark:text-white/60 flex items-center mt-1">
               <MapPin className="h-4 w-4 mr-1" />
               {order.deliveryAddress.split(',')[0]}
             </div>
           </div>
-          <div className="text-lg font-bold text-gray-800">${order.total.toFixed(2)}</div>
+          <div className="text-lg font-bold text-gray-800 dark:text-white">${order.total.toFixed(2)}</div>
         </div>
       </CardContent>
       
@@ -131,12 +140,12 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
           transition={{ duration: 0.3 }}
         >
           <CardContent className="pt-2">
-            <Separator className="my-3 bg-gray-100" />
+            <Separator className="my-3 bg-gray-100 dark:bg-black/20" />
             <div className="space-y-3">
               {order.items.map((item, idx) => (
                 <div key={idx} className="flex justify-between">
-                  <span className="text-gray-700">{item.quantity}x {item.name}</span>
-                  <span className="text-gray-600">${item.price.toFixed(2)}</span>
+                  <span className="text-gray-700 dark:text-white/80">{item.quantity}x {item.name}</span>
+                  <span className="text-gray-600 dark:text-white/70">${item.price.toFixed(2)}</span>
                 </div>
               ))}
             </div>
@@ -147,16 +156,16 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
                 <DialogTrigger asChild>
                   <Button 
                     variant="outline" 
-                    className="bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+                    className="bg-white dark:bg-black/20 border-gray-200 dark:border-black/10 text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-black/30"
                   >
                     <Star className="h-4 w-4 mr-2" />
                     Rate Order
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-white">
+                <DialogContent className="bg-white dark:bg-black">
                   <DialogHeader>
-                    <DialogTitle className="text-gray-800">Rate Your Experience</DialogTitle>
-                    <DialogDescription className="text-gray-500">
+                    <DialogTitle className="text-gray-800 dark:text-white">Rate Your Experience</DialogTitle>
+                    <DialogDescription className="text-gray-500 dark:text-white/60">
                       Let us know how your order from {order.restaurant} was.
                     </DialogDescription>
                   </DialogHeader>
@@ -165,7 +174,7 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
                       <Star 
                         key={star}
                         className={`h-8 w-8 cursor-pointer mx-1 ${
-                          star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                          star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300 dark:text-white/30'
                         }`}
                         onClick={() => setRating(star)}
                       />
@@ -174,12 +183,12 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
                   <DialogFooter>
                     <Button 
                       variant="outline"
-                      className="bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+                      className="bg-white dark:bg-black/20 border-gray-200 dark:border-black/10 text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-black/30"
                       onClick={() => setRatingDialogOpen(false)}
                     >
                       Cancel
                     </Button>
-                    <Button className="bg-black hover:bg-gray-800 text-white">
+                    <Button className="bg-black hover:bg-black/80 text-white dark:bg-white dark:text-black dark:hover:bg-white/80">
                       Submit Rating
                     </Button>
                   </DialogFooter>
@@ -190,7 +199,7 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
             {order.status === "delivered" && (
               <Button 
                 onClick={handleReorder}
-                className="bg-black hover:bg-gray-800 text-white"
+                className="bg-black hover:bg-black/80 text-white dark:bg-white dark:text-black dark:hover:bg-white/80"
               >
                 <Repeat className="h-4 w-4 mr-2" />
                 Reorder
@@ -204,7 +213,7 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
         <Button 
           variant="ghost" 
           size="sm" 
-          className="text-gray-500 hover:text-gray-700 hover:bg-transparent p-0"
+          className="text-gray-500 dark:text-white/60 hover:text-gray-700 dark:hover:text-white hover:bg-transparent p-0"
           onClick={toggleExpand}
         >
           {expanded ? (
@@ -228,14 +237,14 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
 const EmptyOrdersState = () => {
   return (
     <div className="flex flex-col items-center justify-center py-16">
-      <div className="rounded-full bg-gray-50 p-6 mb-4">
-        <ShoppingBag className="h-12 w-12 text-gray-400" />
+      <div className="rounded-full bg-gray-50 dark:bg-black/20 p-6 mb-4">
+        <ShoppingBag className="h-12 w-12 text-gray-400 dark:text-white/40" />
       </div>
-      <h3 className="text-xl font-medium text-gray-800 mb-2">No orders yet</h3>
-      <p className="text-gray-500 text-center max-w-md mb-6">
+      <h3 className="text-xl font-medium text-gray-800 dark:text-white mb-2">No orders yet</h3>
+      <p className="text-gray-500 dark:text-white/60 text-center max-w-md mb-6">
         You haven't placed any orders yet. Explore our restaurants and order some delicious food!
       </p>
-      <Button className="bg-black hover:bg-gray-800 text-white">
+      <Button className="bg-black hover:bg-black/80 text-white dark:bg-white dark:text-black dark:hover:bg-white/80">
         Browse Restaurants
       </Button>
     </div>
@@ -248,10 +257,38 @@ const CustomerOrdersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterValue, setFilterValue] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [orders, setOrders] = useState({
     active: [],
     past: []
   });
+  
+  // Check for dark mode
+  useEffect(() => {
+    // Check if user prefers dark mode
+    if (typeof window !== 'undefined') {
+      // Check for system preference
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      setIsDarkMode(darkModeMediaQuery.matches);
+      
+      // Listen for changes in system preference
+      const handleChange = (e) => {
+        setIsDarkMode(e.matches);
+      };
+      
+      darkModeMediaQuery.addEventListener('change', handleChange);
+      return () => darkModeMediaQuery.removeEventListener('change', handleChange);
+    }
+  }, []);
+  
+  // Apply dark mode class to document
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
   
   // Load orders data
   useEffect(() => {
@@ -334,6 +371,11 @@ const CustomerOrdersPage = () => {
     });
   }, []);
   
+  // Toggle dark mode manually
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+  
   // Filter orders based on search query and filter value
   const filteredOrders = orders[activeTab].filter(order => {
     const matchesSearch = order.restaurant.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -367,14 +409,14 @@ const CustomerOrdersPage = () => {
   );
 
   return (
-    <div className="flex flex-row min-h-screen w-full bg-white">
+    <div className="flex flex-row min-h-screen w-full bg-white dark:bg-black">
       {/* Side bar - Fixed position */}
-      <div className="sticky top-0 h-screen bg-white border-r border-gray-100 shadow-sm">
+      <div className="sticky top-0 h-screen bg-white dark:bg-black border-r border-gray-100 dark:border-black/20 shadow-sm">
         <Navbar variant="sidebar" />
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 px-6 py-8 bg-white">
+      <div className="flex-1 px-6 py-8 bg-white dark:bg-black">
         <div className="max-w-screen-xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -382,10 +424,18 @@ const CustomerOrdersPage = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-800">My Orders</h1>
+              <h1 className="text-3xl font-bold text-gray-800 dark:text-white">My Orders</h1>
               <div className="flex items-center">
-                <Clock className="mr-2 h-5 w-5 text-black" />
-                <span className="text-lg text-gray-700">Order History</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mr-4 bg-white dark:bg-black/20 border-gray-200 dark:border-black/10 text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-black/30"
+                  onClick={toggleDarkMode}
+                >
+                  {isDarkMode ? "Light Mode" : "Dark Mode"}
+                </Button>
+                <Clock className="mr-2 h-5 w-5 text-black dark:text-white" />
+                <span className="text-lg text-gray-700 dark:text-white">Order History</span>
               </div>
             </div>
             
@@ -396,16 +446,16 @@ const CustomerOrdersPage = () => {
               onValueChange={setActiveTab}
               className="mb-6"
             >
-              <TabsList className="bg-gray-50 p-1">
+              <TabsList className="bg-gray-50 dark:bg-black/30 p-1">
                 <TabsTrigger 
                   value="active"
-                  className="data-[state=active]:bg-white data-[state=active]:text-gray-800 data-[state=active]:shadow-sm"
+                  className="data-[state=active]:bg-white data-[state=active]:dark:bg-black data-[state=active]:text-gray-800 data-[state=active]:dark:text-white data-[state=active]:shadow-sm"
                 >
                   Active Orders
                 </TabsTrigger>
                 <TabsTrigger 
                   value="past"
-                  className="data-[state=active]:bg-white data-[state=active]:text-gray-800 data-[state=active]:shadow-sm"
+                  className="data-[state=active]:bg-white data-[state=active]:dark:bg-black data-[state=active]:text-gray-800 data-[state=active]:dark:text-white data-[state=active]:shadow-sm"
                 >
                   Past Orders
                 </TabsTrigger>
@@ -418,25 +468,25 @@ const CustomerOrdersPage = () => {
                   <>
                     <div className="flex flex-col md:flex-row gap-4 mb-6">
                       <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-white/40" />
                         <Input
                           placeholder="Search by restaurant or order ID"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-10 bg-white border-gray-200"
+                          className="pl-10 bg-white dark:bg-black/10 border-gray-200 dark:border-black/20 dark:text-white"
                         />
                       </div>
                       <Select value={filterValue} onValueChange={setFilterValue}>
-                        <SelectTrigger className="w-full md:w-52 bg-white border-gray-200">
+                        <SelectTrigger className="w-full md:w-52 bg-white dark:bg-black/10 border-gray-200 dark:border-black/20 dark:text-white">
                           <div className="flex items-center">
-                            <Filter className="mr-2 h-4 w-4 text-gray-500" />
+                            <Filter className="mr-2 h-4 w-4 text-gray-500 dark:text-white/60" />
                             <SelectValue placeholder="Filter orders" />
                           </div>
                         </SelectTrigger>
-                        <SelectContent className="bg-white">
-                          <SelectItem value="all">All Orders</SelectItem>
-                          <SelectItem value="delivered">Delivered</SelectItem>
-                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                        <SelectContent className="bg-white dark:bg-black">
+                          <SelectItem value="all" className="dark:text-white">All Orders</SelectItem>
+                          <SelectItem value="delivered" className="dark:text-white">Delivered</SelectItem>
+                          <SelectItem value="cancelled" className="dark:text-white">Cancelled</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -456,9 +506,9 @@ const CustomerOrdersPage = () => {
                     {/* Show empty state if filtered results are empty */}
                     {currentOrders.length === 0 && (
                       <div className="text-center py-12">
-                        <AlertCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-700">No orders found</h3>
-                        <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                        <AlertCircle className="h-12 w-12 text-gray-300 dark:text-white/20 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-700 dark:text-white">No orders found</h3>
+                        <p className="text-gray-500 dark:text-white/60">Try adjusting your search or filter criteria</p>
                       </div>
                     )}
                     
@@ -473,7 +523,7 @@ const CustomerOrdersPage = () => {
                                 e.preventDefault();
                                 if (currentPage > 1) setCurrentPage(currentPage - 1);
                               }}
-                              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                              className={`${currentPage === 1 ? "pointer-events-none opacity-50" : ""} dark:text-white`}
                             />
                           </PaginationItem>
                           
@@ -486,6 +536,7 @@ const CustomerOrdersPage = () => {
                                   setCurrentPage(i + 1);
                                 }}
                                 isActive={currentPage === i + 1}
+                                className="dark:text-white dark:data-[active=true]:bg-white/10"
                               >
                                 {i + 1}
                               </PaginationLink>
@@ -499,7 +550,7 @@ const CustomerOrdersPage = () => {
                                 e.preventDefault();
                                 if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                               }}
-                              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                              className={`${currentPage === totalPages ? "pointer-events-none opacity-50" : ""} dark:text-white`}
                             />
                           </PaginationItem>
                         </PaginationContent>
@@ -516,25 +567,25 @@ const CustomerOrdersPage = () => {
                   <>
                     <div className="flex flex-col md:flex-row gap-4 mb-6">
                       <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-white/40" />
                         <Input
                           placeholder="Search by restaurant or order ID"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-10 bg-white border-gray-200"
+                          className="pl-10 bg-white dark:bg-black/10 border-gray-200 dark:border-black/20 dark:text-white"
                         />
                       </div>
                       <Select value={filterValue} onValueChange={setFilterValue}>
-                        <SelectTrigger className="w-full md:w-52 bg-white border-gray-200">
+                        <SelectTrigger className="w-full md:w-52 bg-white dark:bg-black/10 border-gray-200 dark:border-black/20 dark:text-white">
                           <div className="flex items-center">
-                            <Filter className="mr-2 h-4 w-4 text-gray-500" />
+                            <Filter className="mr-2 h-4 w-4 text-gray-500 dark:text-white/60" />
                             <SelectValue placeholder="Filter orders" />
                           </div>
                         </SelectTrigger>
-                        <SelectContent className="bg-white">
-                          <SelectItem value="all">All Orders</SelectItem>
-                          <SelectItem value="delivered">Delivered</SelectItem>
-                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                        <SelectContent className="bg-white dark:bg-black">
+                          <SelectItem value="all" className="dark:text-white">All Orders</SelectItem>
+                          <SelectItem value="delivered" className="dark:text-white">Delivered</SelectItem>
+                          <SelectItem value="cancelled" className="dark:text-white">Cancelled</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -554,9 +605,9 @@ const CustomerOrdersPage = () => {
                     {/* Show empty state if filtered results are empty */}
                     {currentOrders.length === 0 && (
                       <div className="text-center py-12">
-                        <AlertCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-700">No orders found</h3>
-                        <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                        <AlertCircle className="h-12 w-12 text-gray-300 dark:text-white/20 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-700 dark:text-white">No orders found</h3>
+                        <p className="text-gray-500 dark:text-white/60">Try adjusting your search or filter criteria</p>
                       </div>
                     )}
                     
@@ -571,7 +622,7 @@ const CustomerOrdersPage = () => {
                                 e.preventDefault();
                                 if (currentPage > 1) setCurrentPage(currentPage - 1);
                               }}
-                              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                              className={`${currentPage === 1 ? "pointer-events-none opacity-50" : ""} dark:text-white`}
                             />
                           </PaginationItem>
                           
@@ -584,6 +635,7 @@ const CustomerOrdersPage = () => {
                                   setCurrentPage(i + 1);
                                 }}
                                 isActive={currentPage === i + 1}
+                                className="dark:text-white dark:data-[active=true]:bg-white/10"
                               >
                                 {i + 1}
                               </PaginationLink>
@@ -597,7 +649,7 @@ const CustomerOrdersPage = () => {
                                 e.preventDefault();
                                 if (currentPage < totalPages) setCurrentPage(currentPage + 1);
                               }}
-                              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                              className={`${currentPage === totalPages ? "pointer-events-none opacity-50" : ""} dark:text-white`}
                             />
                           </PaginationItem>
                         </PaginationContent>
