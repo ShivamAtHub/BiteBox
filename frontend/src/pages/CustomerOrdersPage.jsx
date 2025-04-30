@@ -53,12 +53,49 @@ import {
 } from "@/components/ui/pagination";
 import Navbar from "../components/ui/Navbar";
 import Footer from "../components/ui/Footer";
+import { useNavigate } from "react-router-dom";
+
+
+import { RoundRobin } from '../utils/roundRobin';  // Named import
 
 // Order Card Component
 const OrderCard = ({ order, onReorder, onViewDetails }) => {
   const [expanded, setExpanded] = useState(false);
   const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
   const [rating, setRating] = useState(0);
+  const [timeElapsed, setTimeElapsed] = useState(0);
+
+  useEffect(() => {
+    if (order.status === 'active') {
+      // Get the last stored elapsed time from localStorage
+      const storedElapsedTime = localStorage.getItem(`order_${order.orderId}_elapsed`);
+      const lastUpdateTime = localStorage.getItem(`order_${order.orderId}_lastUpdate`);
+      
+      let initialElapsed = 0;
+      if (storedElapsedTime && lastUpdateTime) {
+        const timeSinceLastUpdate = Math.floor((Date.now() - parseInt(lastUpdateTime)) / 1000 / 60);
+        initialElapsed = parseInt(storedElapsedTime) + timeSinceLastUpdate;
+      } else {
+        const orderTime = new Date(order.orderTime);
+        const now = new Date();
+        initialElapsed = Math.floor((now - orderTime) / 1000 / 60);
+      }
+      
+      setTimeElapsed(initialElapsed);
+      
+      const interval = setInterval(() => {
+        setTimeElapsed(prev => {
+          const newElapsed = prev + 1;
+          // Store the current elapsed time and update timestamp
+          localStorage.setItem(`order_${order.orderId}_elapsed`, newElapsed.toString());
+          localStorage.setItem(`order_${order.orderId}_lastUpdate`, Date.now().toString());
+          return newElapsed;
+        });
+      }, 60000); // Update every minute
+      
+      return () => clearInterval(interval);
+    }
+  }, [order.orderTime, order.status, order.orderId]);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -69,11 +106,24 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
     onReorder(order);
   };
 
+  const handleRatingSubmit = () => {
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    const updatedOrders = orders.map(o => {
+      if (o.orderId === order.orderId) {
+        return { ...o, rating, rated: true };
+      }
+      return o;
+    });
+    localStorage.setItem('orders', JSON.stringify(updatedOrders));
+    setRatingDialogOpen(false);
+  };
+
   const statusColors = {
     active: {
       light: "bg-yellow-50 text-yellow-600 border-yellow-100",
       dark: "bg-yellow-900/20 text-yellow-400 border-yellow-900/30"
     },
+    pending: "bg-blue-50 text-blue-600 border-blue-100",
     delivered: {
       light: "bg-green-50 text-green-600 border-green-100",
       dark: "bg-green-900/20 text-green-400 border-green-900/30"
@@ -82,6 +132,15 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
       light: "bg-red-50 text-red-600 border-red-100",
       dark: "bg-red-900/20 text-red-400 border-red-900/30"
     }
+  };
+
+  const getStatusText = (order) => {
+    if (order.status === 'active') {
+      return `In Progress (${order.timeElapsed || 0} min ago)`;
+    } else if (order.status === 'pending') {
+      return 'Pending Confirmation';
+    }
+    return order.status === 'delivered' ? 'Delivered' : 'Cancelled';
   };
 
   return (
@@ -94,13 +153,12 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
           <div className="font-medium text-gray-800 dark:text-white">#{order.orderId}</div>
           <div className="text-sm text-gray-500 dark:text-white/60 flex items-center">
             <CalendarIcon className="h-4 w-4 mr-1" />
-            {order.orderDate}
+            {new Date(order.orderTime).toLocaleString()}
           </div>
         </div>
         <div className="flex gap-2 items-center">
           <Badge className={`${statusColors[order.status].light} dark:${statusColors[order.status].dark}`}>
-            {order.status === "active" ? "In Progress" : 
-             order.status === "delivered" ? "Delivered" : "Cancelled"}
+            {getStatusText(order)}
           </Badge>
           {order.status === "active" && (
             <Button 
@@ -122,10 +180,10 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
       <CardContent className="px-4 pb-0">
         <div className="flex justify-between items-center">
           <div>
-            <div className="text-sm text-gray-800 dark:text-white font-medium">{order.restaurant}</div>
+            <div className="text-sm text-gray-800 dark:text-white font-medium">{order.restaurantName}</div>
             <div className="text-sm text-gray-500 dark:text-white/60 flex items-center mt-1">
               <MapPin className="h-4 w-4 mr-1" />
-              {order.deliveryAddress.split(',')[0]}
+              {order.deliveryAddress}
             </div>
           </div>
           <div className="text-lg font-bold text-gray-800 dark:text-white">${order.total.toFixed(2)}</div>
@@ -145,7 +203,7 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
               {order.items.map((item, idx) => (
                 <div key={idx} className="flex justify-between">
                   <span className="text-gray-700 dark:text-white/80">{item.quantity}x {item.name}</span>
-                  <span className="text-gray-600 dark:text-white/70">${item.price.toFixed(2)}</span>
+                  <span className="text-gray-600 dark:text-white/70">${(item.price * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>
@@ -166,7 +224,7 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
                   <DialogHeader>
                     <DialogTitle className="text-gray-800 dark:text-white">Rate Your Experience</DialogTitle>
                     <DialogDescription className="text-gray-500 dark:text-white/60">
-                      Let us know how your order from {order.restaurant} was.
+                      Let us know how your order from {order.restaurantName} was.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="flex justify-center py-6">
@@ -188,7 +246,10 @@ const OrderCard = ({ order, onReorder, onViewDetails }) => {
                     >
                       Cancel
                     </Button>
-                    <Button className="bg-black hover:bg-black/80 text-white dark:bg-white dark:text-black dark:hover:bg-white/80">
+                    <Button 
+                      className="bg-black hover:bg-black/80 text-white dark:bg-white dark:text-black dark:hover:bg-white/80"
+                      onClick={handleRatingSubmit}
+                    >
                       Submit Rating
                     </Button>
                   </DialogFooter>
@@ -244,7 +305,7 @@ const EmptyOrdersState = () => {
       <p className="text-gray-500 dark:text-white/60 text-center max-w-md mb-6">
         You haven't placed any orders yet. Explore our restaurants and order some delicious food!
       </p>
-      <Button className="bg-black hover:bg-black/80 text-white dark:bg-white dark:text-black dark:hover:bg-white/80">
+      <Button href="/menu" className="bg-black hover:bg-black/80 text-white dark:bg-white dark:text-black dark:hover:bg-white/80" >
         Browse Restaurants
       </Button>
     </div>
@@ -253,6 +314,7 @@ const EmptyOrdersState = () => {
 
 // Main Page Component
 const CustomerOrdersPage = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("active");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterValue, setFilterValue] = useState("all");
@@ -290,85 +352,96 @@ const CustomerOrdersPage = () => {
     }
   }, [isDarkMode]);
   
-  // Load orders data
+  // Check for dark mode
   useEffect(() => {
-    // This would be an API call in a real application
-    const mockActiveOrders = [
-      {
-        orderId: "ORD-3829501",
-        restaurant: "Pizza Palace",
-        orderDate: "Today at 7:15 PM",
-        deliveryAddress: "123 Main Street, San Francisco, CA 94105",
-        status: "active",
-        total: 45.63,
-        items: [
-          { name: "Margherita Pizza", quantity: 1, price: 12.99 },
-          { name: "Cheeseburger Deluxe", quantity: 2, price: 17.98 },
-          { name: "Caesar Salad", quantity: 1, price: 7.50 }
-        ]
-      },
-      {
-        orderId: "ORD-3829495",
-        restaurant: "Sushi Express",
-        orderDate: "Today at 6:30 PM",
-        deliveryAddress: "456 Market St, San Francisco, CA 94105",
-        status: "active",
-        total: 32.50,
-        items: [
-          { name: "California Roll", quantity: 2, price: 15.00 },
-          { name: "Miso Soup", quantity: 1, price: 4.50 },
-          { name: "Edamame", quantity: 1, price: 5.00 }
-        ]
+    // Check if user prefers dark mode
+    if (typeof window !== 'undefined') {
+      // Check for system preference
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      setIsDarkMode(darkModeMediaQuery.matches);
+      
+      // Listen for changes in system preference
+      const handleChange = (e) => {
+        setIsDarkMode(e.matches);
+      };
+      
+      darkModeMediaQuery.addEventListener('change', handleChange);
+      return () => darkModeMediaQuery.removeEventListener('change', handleChange);
+    }
+  }, []);
+  
+  // Apply dark mode class to document
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+  
+  // Load and update orders from localStorage
+  useEffect(() => {
+    const loadOrders = () => {
+      console.log('Loading orders...');
+      const storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+      const currentOrder = JSON.parse(localStorage.getItem('currentOrder') || 'null');
+      
+      console.log('Stored Orders:', storedOrders);
+      console.log('Current Order:', currentOrder);
+
+      // Update order statuses based on time
+      const updatedOrders = storedOrders.map(order => {
+        if (order.status === 'active' || order.status === 'pending') {
+          const orderTime = new Date(order.orderTime);
+          const now = new Date();
+          const timeSinceOrder = now - orderTime;
+          
+          // Update status based on time elapsed
+          if (timeSinceOrder > 30 * 60 * 1000) { // 30 minutes
+            return { ...order, status: 'delivered' };
+          }
+        }
+        return order;
+      });
+
+      // Save updated orders back to localStorage
+      if (updatedOrders.some(order => order.status === 'delivered')) {
+        localStorage.setItem('orders', JSON.stringify(updatedOrders));
       }
-    ];
+
+      // Combine current order with stored orders
+      const allOrders = currentOrder ? [currentOrder, ...updatedOrders] : updatedOrders;
+      
+      console.log('All Orders:', allOrders);
+
+      // Separate active and past orders
+      const activeOrders = allOrders.filter(order => {
+        const isActive = order.status === 'active' || order.status === 'pending';
+        console.log(`Order ${order.orderId} status: ${order.status}, isActive: ${isActive}`);
+        return isActive;
+      });
+      
+      const pastOrders = allOrders.filter(order => 
+        order.status !== 'active' && order.status !== 'pending'
+      );
+      
+      console.log('Active Orders:', activeOrders);
+      console.log('Past Orders:', pastOrders);
+
+      setOrders({
+        active: activeOrders,
+        past: pastOrders
+      });
+    };
+
+    // Load orders immediately
+    loadOrders();
     
-    const mockPastOrders = [
-      {
-        orderId: "ORD-3829402",
-        restaurant: "Burger King",
-        orderDate: "Yesterday at 1:20 PM",
-        deliveryAddress: "123 Main Street, San Francisco, CA 94105",
-        status: "delivered",
-        rated: true,
-        total: 28.75,
-        items: [
-          { name: "Whopper", quantity: 2, price: 14.98 },
-          { name: "Fries", quantity: 2, price: 7.98 },
-          { name: "Soda", quantity: 2, price: 5.79 }
-        ]
-      },
-      {
-        orderId: "ORD-3829350",
-        restaurant: "Taco Bell",
-        orderDate: "Apr 20, 2025",
-        deliveryAddress: "123 Main Street, San Francisco, CA 94105",
-        status: "delivered",
-        rated: false,
-        total: 22.15,
-        items: [
-          { name: "Crunchy Taco", quantity: 3, price: 10.47 },
-          { name: "Burrito Supreme", quantity: 1, price: 6.99 },
-          { name: "Nachos", quantity: 1, price: 4.69 }
-        ]
-      },
-      {
-        orderId: "ORD-3829220",
-        restaurant: "Chipotle",
-        orderDate: "Apr 18, 2025",
-        deliveryAddress: "123 Main Street, San Francisco, CA 94105",
-        status: "cancelled",
-        total: 18.50,
-        items: [
-          { name: "Burrito Bowl", quantity: 1, price: 12.50 },
-          { name: "Chips & Guac", quantity: 1, price: 6.00 }
-        ]
-      }
-    ];
+    // Set up interval to check for order status updates
+    const interval = setInterval(loadOrders, 60000); // Check every minute
     
-    setOrders({
-      active: mockActiveOrders,
-      past: mockPastOrders
-    });
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
   }, []);
   
   // Toggle dark mode manually
@@ -378,8 +451,13 @@ const CustomerOrdersPage = () => {
   
   // Filter orders based on search query and filter value
   const filteredOrders = orders[activeTab].filter(order => {
-    const matchesSearch = order.restaurant.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          order.orderId.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!order) return false;
+    
+    const restaurantName = order.restaurantName || '';
+    const orderId = order.orderId || '';
+    
+    const matchesSearch = restaurantName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          orderId.toLowerCase().includes(searchQuery.toLowerCase());
     
     if (filterValue === "all") return matchesSearch;
     if (filterValue === "delivered") return matchesSearch && order.status === "delivered";
@@ -390,14 +468,14 @@ const CustomerOrdersPage = () => {
   
   // Handle reorder
   const handleReorder = (order) => {
-    console.log("Reordering:", order.orderId);
-    // In a real app, this would add items to cart and redirect to checkout
+    localStorage.setItem('cartItems', JSON.stringify(order.items));
+    navigate('/cart');
   };
   
-  // Handle view details - would navigate to order tracking page
+  // Handle view details - navigate to order tracking page
   const handleViewDetails = (order) => {
-    console.log("Viewing details for:", order.orderId);
-    // In a real app, this would navigate to order tracking page
+    localStorage.setItem('currentOrder', JSON.stringify(order));
+    navigate('/order-tracking');
   };
   
   // Items per page

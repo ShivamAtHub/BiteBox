@@ -10,19 +10,72 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import FoodItemCard from '@/components/FoodItemCardMenu';
-
+import { useCart } from '../context/CartContext';
+import { Toast } from '@/components/ui/Toast';
 import Navbar from "../components/ui/Navbar";
 import Footer from '../components/ui/Footer';
 
 const Menu = () => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [sortOption, setSortOption] = useState('popular');
+  const [sortOption, setSortOption] = useState('recommended');
   const [items, setItems] = useState([]);
   const [visibleItems, setVisibleItems] = useState(12);
   const [loading, setLoading] = useState(true);
   const [filteredItems, setFilteredItems] = useState([]);
+  const [orderCounts, setOrderCounts] = useState({});
+  const [recentOrders, setRecentOrders] = useState({});
   const observer = useRef();
   const loadMoreRef = useRef(null);
+  const { addToCart, toastMessage, showToast, setShowToast } = useCart();
+
+  // Priority calculation weights
+  const PRIORITY_WEIGHTS = {
+    rating: 0.4,
+    orderCount: 0.3,
+    recentOrders: 0.2,
+    specialTag: 0.1
+  };
+
+  // Calculate priority score for an item
+  const calculatePriorityScore = (item) => {
+    const ratingScore = (item.rating / 5) * PRIORITY_WEIGHTS.rating;
+    const orderCountScore = (orderCounts[item.id] || 0) / 100 * PRIORITY_WEIGHTS.orderCount;
+    const recentOrdersScore = (recentOrders[item.id] || 0) / 10 * PRIORITY_WEIGHTS.recentOrders;
+    const specialTagScore = item.special ? PRIORITY_WEIGHTS.specialTag : 0;
+    
+    return ratingScore + orderCountScore + recentOrdersScore + specialTagScore;
+  };
+
+  // Determine badge type based on rating and priority score
+  const getBadgeType = (item) => {
+    if (item.special) return { type: 'special', color: 'bg-red-500', text: 'Special' };
+    
+    const score = calculatePriorityScore(item);
+    const rating = item.rating;
+    
+    if (rating >= 4.8) {
+      return { type: 'trending', color: 'bg-green-500', text: 'Trending' };
+    } else if (rating >= 4.5) {
+      return { type: 'popular', color: 'bg-blue-500', text: 'Popular' };
+    } else if (score > 0.7) {
+      return { type: 'trending', color: 'bg-green-500', text: 'Trending' };
+    } else if (score > 0.5) {
+      return { type: 'popular', color: 'bg-blue-500', text: 'Popular' };
+    }
+    
+    return null;
+  };
+
+  // Handle add to cart
+  const handleAddToCart = (item) => {
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      category: item.category
+    });
+  };
 
   // Static food data
   useEffect(() => {
@@ -40,6 +93,7 @@ const Menu = () => {
           rating: 4.8,
           deliveryTime: 25,
         },
+        // ... (rest of your food data remains the same)
         {
           id: 2,
           name: "Pepperoni Pizza",
@@ -290,7 +344,13 @@ const Menu = () => {
         }
       ];
       
-      setItems(foodData);
+      // Add special tags to some items
+      const enhancedData = foodData.map(item => ({
+        ...item,
+        special: Math.random() < 0.2, // 20% chance of being special
+      }));
+      
+      setItems(enhancedData);
       setLoading(false);
     }, 1000);
   }, []);
@@ -318,13 +378,16 @@ const Menu = () => {
       case 'delivery':
         result.sort((a, b) => a.deliveryTime - b.deliveryTime);
         break;
-      default: // 'popular'
+      case 'recommended':
+        result.sort((a, b) => calculatePriorityScore(b) - calculatePriorityScore(a));
+        break;
+      default:
         result.sort((a, b) => b.rating - a.rating);
         break;
     }
 
     setFilteredItems(result);
-  }, [items, activeCategory, sortOption]);
+  }, [items, activeCategory, sortOption, orderCounts, recentOrders]);
 
   // Intersection Observer for infinite scrolling / lazy loading
   const lastItemRef = useCallback(node => {
@@ -351,51 +414,55 @@ const Menu = () => {
   ];
 
   return (
-    <div className="flex flex-row min-h-screen w-full bg-white dark:bg-black">
-      {/* Side bar - Fixed position */}
-      <div className="sticky top-0 h-screen bg-white dark:bg-black border-r border-gray-100 dark:border-gray-800 shadow-sm">
-        <Navbar variant='sidebar' />
-      </div>
-
-      {/* Main content area */}
-      <div className="flex-1 px-6 py-8 bg-white dark:bg-black">
-        <div className="max-w-screen-xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100">Our Menu</h1>
-
-          {/* Filters and Sort Options */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            {/* Category Filters */}
-            <div className="flex flex-wrap gap-2">
-              {categories.map(category => (
-                <Badge
-                  key={category.id}
-                  variant={activeCategory === category.id ? "default" : "outline"}
-                  className={`cursor-pointer px-4 py-2 text-sm ${
-                    activeCategory === category.id 
-                      ? "bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black" 
-                      : "bg-white dark:bg-black text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
-                  }`}
-                  onClick={() => setActiveCategory(category.id)}
-                >
-                  {category.name}
-                </Badge>
-              ))}
-            </div>
-
-            {/* Sort Options */}
-            <Select value={sortOption} onValueChange={setSortOption}>
-              <SelectTrigger className="w-48 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800">
-                <SelectItem value="popular">Most Popular</SelectItem>
-                <SelectItem value="price-low">Price: Low to High</SelectItem>
-                <SelectItem value="price-high">Price: High to Low</SelectItem>
-                <SelectItem value="rating">Highest Rated</SelectItem>
-                <SelectItem value="delivery">Fastest Delivery</SelectItem>
-              </SelectContent>
-            </Select>
+    <div className="flex flex-col min-h-screen">
+     
+      <main className="flex-grow">
+        <div className="flex flex-row min-h-screen w-full bg-white dark:bg-black">
+          {/* Side bar - Fixed position */}
+          <div className="sticky top-0 h-screen bg-white dark:bg-black border-r border-gray-100 dark:border-gray-800 shadow-sm">
+            <Navbar variant='sidebar' />
           </div>
+
+          {/* Main content area */}
+          <div className="flex-1 px-6 py-8 bg-white dark:bg-black">
+            <div className="max-w-screen-xl mx-auto">
+              <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100">Our Menu</h1>
+
+              {/* Filters and Sort Options */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                {/* Category Filters */}
+                <div className="flex flex-wrap gap-2">
+                  {categories.map(category => (
+                    <Badge
+                      key={category.id}
+                      variant={activeCategory === category.id ? "default" : "outline"}
+                      className={`cursor-pointer px-4 py-2 text-sm ${
+                        activeCategory === category.id 
+                          ? "bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black" 
+                          : "bg-white dark:bg-black text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900"
+                      }`}
+                      onClick={() => setActiveCategory(category.id)}
+                    >
+                      {category.name}
+                    </Badge>
+                  ))}
+                </div>
+
+                {/* Sort Options */}
+                <Select value={sortOption} onValueChange={setSortOption}>
+                  <SelectTrigger className="w-48 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800">
+                    <SelectItem value="recommended">Recommended</SelectItem>
+                    <SelectItem value="popular">Most Popular</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
+                    <SelectItem value="rating">Highest Rated</SelectItem>
+                    <SelectItem value="delivery">Fastest Delivery</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
           {/* Food Items Grid */}
           {loading ? (
@@ -415,18 +482,39 @@ const Menu = () => {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredItems.slice(0, visibleItems).map((item, index) => {
-                  if (index === visibleItems - 1) {
-                    return (
-                      <div ref={lastItemRef} key={item.id} className="bg-white dark:bg-black border border-gray-100 dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                        <FoodItemCard item={item} />
-                      </div>
-                    );
-                  }
-                  return (
-                    <div key={item.id} className="bg-white dark:bg-black border border-gray-100 dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                      <FoodItemCard item={item} />
+                  const badgeInfo = getBadgeType(item);
+                  const orderCount = orderCounts[item.id] || 0;
+                  const recentOrderCount = recentOrders[item.id] || 0;
+
+                  const itemCard = (
+                    <div key={item.id} className="bg-white dark:bg-black border border-gray-100 dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 relative">
+                      {badgeInfo && (
+                        <div className="absolute top-2 right-2 flex flex-col gap-1 z-10">
+                          <Badge
+                            variant="default"
+                            className={`${badgeInfo.color} text-white font-semibold px-3 py-1 shadow-md transition-none`}
+                          >
+                            {badgeInfo.text}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className="bg-white/95 dark:bg-black/95 backdrop-blur-sm text-gray-700 dark:text-gray-300 font-semibold px-2 py-1 shadow-md transition-none"
+                          >
+                            ⭐ {item.rating.toFixed(1)}
+                          </Badge>
+                        </div>
+                      )}
+                      <FoodItemCard 
+                        item={item} 
+                        onAddToCart={() => handleAddToCart(item)}
+                      />
                     </div>
                   );
+
+                  if (index === visibleItems - 1) {
+                    return <div ref={lastItemRef} key={item.id}>{itemCard}</div>;
+                  }
+                  return itemCard;
                 })}
               </div>
 
@@ -451,13 +539,16 @@ const Menu = () => {
               )}
             </>
           )}
-
-          {/* Footer */}
-          <div className="pt-20 pb-10">
-            <Footer />
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+      <Footer />
+      <Toast 
+        message={toastMessage} 
+        show={showToast} 
+        onClose={() => setShowToast(false)} 
+      />
     </div>
   );
 };
